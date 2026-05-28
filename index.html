@@ -259,6 +259,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="cal-selected-label" id="cal-selected-label"></div>
     </div>
     <div id="agenda-day-events" style="margin-top:8px"></div>
+    <div style="margin:8px 16px 0;display:flex;gap:8px">
+      <button class="add-inline-btn" style="flex:1" onclick="openAddTask()">+ tarefa</button>
+      <button class="add-inline-btn" style="flex:1" onclick="openAddComp()">+ compromisso</button>
+    </div>
   </div>
  
   <!-- TAREFAS -->
@@ -271,6 +275,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div id="tasks-flui-section"></div>
     <div id="tasks-pousa-section"></div>
     <div id="tasks-done-section"></div>
+    <div style="margin:0 16px 16px"><button class="add-inline-btn" onclick="openAddTask()">+ nova tarefa</button></div>
   </div>
  
   <!-- COMPROMISSOS -->
@@ -282,6 +287,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div id="comp-fixo-section"></div>
     <div id="comp-variavel-section"></div>
     <div id="comp-pessoal-section"></div>
+    <div style="margin:0 16px 16px"><button class="add-inline-btn" onclick="openAddComp()">+ novo compromisso</button></div>
   </div>
  
   <!-- METAS -->
@@ -794,30 +800,38 @@ async function saveTask(){
     recorrente:getActivePill('nt-rec-pills')==='sim',
     hora,data,notificacao:notif,
   };
+  let saveOk=false;
   if(editId){
     const{error}=await sb.from('luana_tasks').update(payload).eq('id',editId);
-    if(!error){const i=tasks.findIndex(x=>x.id===editId);if(i>=0)tasks[i]={...tasks[i],...payload};showToast('Tarefa atualizada!');}
+    if(!error){const i=tasks.findIndex(x=>x.id===editId);if(i>=0)tasks[i]={...tasks[i],...payload};saveOk=true;}
+    else{showToast('Erro ao salvar. Tente novamente.');}
   } else {
     payload.user_id=currentUser.id;payload.done=false;payload.historico=[];
     const{data:d,error}=await sb.from('luana_tasks').insert(payload).select().single();
-    if(!error&&d){tasks.push(d);showToast('Tarefa adicionada!');}
+    if(!error&&d){tasks.push(d);saveOk=true;}
+    else{showToast('Erro ao salvar. Tente novamente.');}
   }
   btn.disabled=false;
-  if(notif&&hora&&data){scheduleNotif('Luana 360 — '+texto,payload.porque,data,hora);}
-  closeModal('modal-task');setSyncBadge('saved');renderAll();
+  if(saveOk){
+    if(notif&&hora&&data){scheduleNotif('Luana 360 — '+texto,payload.porque,data,hora);}
+    showToast(editId?'Alterações salvas!':'Tarefa adicionada!');
+    closeModal('modal-task');setSyncBadge('saved');renderAll();
+  }
 }
  
 async function deleteTask(){
   const id=document.getElementById('nt-edit-id').value;if(!id)return;
   if(!confirm('Excluir esta tarefa?'))return;
-  await sb.from('luana_tasks').delete().eq('id',id);
-  tasks=tasks.filter(x=>x.id!==id);
-  closeModal('modal-task');showToast('Tarefa excluída.');renderAll();
+  const{error}=await sb.from('luana_tasks').delete().eq('id',id);
+  if(!error){
+    tasks=tasks.filter(x=>x.id!==id);
+    closeModal('modal-task');showToast('Tarefa excluída!');renderAll();
+  } else {showToast('Erro ao excluir.');}
 }
  
-async function toggleTask(id){
+async function toggleTask(id,force){
   const t=tasks.find(x=>x.id===id);if(!t)return;
-  if(!t.done&&t.recorrente){startTimer(t);return;}
+  if(!t.done&&t.recorrente&&force!==true){startTimer(t);return;}
   t.done=!t.done;
   if(t.meta_id){const m=metas.find(x=>x.id===t.meta_id);if(m){m.tasks_done=Math.max(0,(m.tasks_done||0)+(t.done?1:-1));debouncedSync(()=>sb.from('luana_metas').update({tasks_done:m.tasks_done}).eq('id',m.id).then(r=>r.error));}}
   debouncedSync(()=>sb.from('luana_tasks').update({done:t.done}).eq('id',t.id).then(r=>r.error));
@@ -863,25 +877,33 @@ async function saveComp(){
   const data=document.getElementById('nc-data').value||null;
   const notif=getActivePill('nc-notif-pills')==='sim';
   const payload={nome,hora,tipo:compType,area:document.getElementById('nc-area').value,local:document.getElementById('nc-local').value.trim(),data,notificacao:notif};
+  let compOk=false;
   if(editId){
     const{error}=await sb.from('luana_compromissos').update(payload).eq('id',editId);
-    if(!error){const i=compromissos.findIndex(x=>x.id===editId);if(i>=0)compromissos[i]={...compromissos[i],...payload};showToast('Compromisso atualizado!');}
+    if(!error){const i=compromissos.findIndex(x=>x.id===editId);if(i>=0)compromissos[i]={...compromissos[i],...payload};compOk=true;}
+    else{showToast('Erro ao salvar.');}
   } else {
     payload.user_id=currentUser.id;
     const{data:d,error}=await sb.from('luana_compromissos').insert(payload).select().single();
-    if(!error&&d){compromissos.push(d);showToast('Compromisso adicionado!');}
+    if(!error&&d){compromissos.push(d);compOk=true;}
+    else{showToast('Erro ao salvar.');}
   }
   btn.disabled=false;
-  if(notif&&hora&&data){scheduleNotif('Luana 360 — '+nome,payload.local||'Compromisso no horário',data,hora);}
-  closeModal('modal-comp');setSyncBadge('saved');renderAll();
+  if(compOk){
+    if(notif&&hora&&data){scheduleNotif('Luana 360 — '+nome,payload.local||'Compromisso no horário',data,hora);}
+    showToast(editId?'Alterações salvas!':'Compromisso adicionado!');
+    closeModal('modal-comp');setSyncBadge('saved');renderAll();
+  }
 }
  
 async function deleteComp(){
   const id=document.getElementById('nc-edit-id').value;if(!id)return;
   if(!confirm('Excluir este compromisso?'))return;
-  await sb.from('luana_compromissos').delete().eq('id',id);
-  compromissos=compromissos.filter(x=>x.id!==id);
-  closeModal('modal-comp');showToast('Compromisso excluído.');renderAll();
+  const{error}=await sb.from('luana_compromissos').delete().eq('id',id);
+  if(!error){
+    compromissos=compromissos.filter(x=>x.id!==id);
+    closeModal('modal-comp');showToast('Compromisso excluído!');renderAll();
+  } else {showToast('Erro ao excluir.');}
 }
  
 // ---- META MODAL ----
@@ -915,24 +937,30 @@ async function saveMeta(){
   const editId=document.getElementById('nm-edit-id').value;
   const btn=document.getElementById('nm-save-btn');btn.disabled=true;
   const payload={nome,emoji:document.getElementById('nm-emoji').value||'🎯',area:document.getElementById('nm-area').value,pct:parseInt(document.getElementById('nm-pct').value)||0};
+  let metaOk=false;
   if(editId){
     const{error}=await sb.from('luana_metas').update(payload).eq('id',editId);
-    if(!error){const i=metas.findIndex(x=>x.id===editId);if(i>=0)metas[i]={...metas[i],...payload};showToast('Meta atualizada!');}
+    if(!error){const i=metas.findIndex(x=>x.id===editId);if(i>=0)metas[i]={...metas[i],...payload};metaOk=true;}
+    else{showToast('Erro ao salvar.');}
   } else {
     payload.user_id=currentUser.id;payload.tasks_done=0;
     const{data:d,error}=await sb.from('luana_metas').insert(payload).select().single();
-    if(!error&&d){metas.push(d);showToast('Meta adicionada!');}
+    if(!error&&d){metas.push(d);metaOk=true;}
+    else{showToast('Erro ao salvar.');}
   }
-  btn.disabled=false;closeModal('modal-meta');setSyncBadge('saved');renderAll();
+  btn.disabled=false;
+  if(metaOk){showToast(editId?'Alterações salvas!':'Meta adicionada!');closeModal('modal-meta');setSyncBadge('saved');renderAll();}
 }
  
 async function deleteMeta(){
   const id=document.getElementById('nm-edit-id').value;if(!id)return;
   if(!confirm('Excluir esta meta?'))return;
-  await sb.from('luana_metas').delete().eq('id',id);
-  metas=metas.filter(x=>x.id!==id);
-  tasks.forEach(t=>{if(t.meta_id===id){t.meta_id=null;sb.from('luana_tasks').update({meta_id:null}).eq('id',t.id);}});
-  closeModal('modal-meta');showToast('Meta excluída.');renderAll();
+  const{error}=await sb.from('luana_metas').delete().eq('id',id);
+  if(!error){
+    metas=metas.filter(x=>x.id!==id);
+    tasks.forEach(t=>{if(t.meta_id===id){t.meta_id=null;sb.from('luana_tasks').update({meta_id:null}).eq('id',t.id);}});
+    closeModal('modal-meta');showToast('Meta excluída!');renderAll();
+  } else {showToast('Erro ao excluir.');}
 }
  
 async function updateMetaPct(id,val){
@@ -998,6 +1026,7 @@ function taskHTML(t){
       </div>
       <div class="item-actions">
         <button class="action-btn" onclick="openEditTask('${t.id}')">✎ editar</button>
+        ${!t.done?`<button class="action-btn" style="color:var(--saude-dark);border-color:var(--saude-bg)" onclick="toggleTask('${t.id}',true)">✓ concluir</button>`:'<button class="action-btn" onclick="toggleTask(''+t.id+'',true)">↩ desfazer</button>'}
       </div>
     </div>
   </div>`;
