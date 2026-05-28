@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Luana 360">
+<meta name="theme-color" content="#F7F4EF">
+<title>Luana 360</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --bg:#F7F4EF;--surface:#FFF;--border:rgba(0,0,0,0.07);--text:#1A1814;--muted:#8A8580;--faint:#EFECE7;
+  --saude:#4CAF87;--saude-bg:#E8F7F1;--saude-dark:#2D7A5C;
+  --carreira:#7B6CF6;--carreira-bg:#EEEBFF;--carreira-dark:#4A3DB0;
+  --financas:#F0A500;--financas-bg:#FFF4D6;--financas-dark:#9A6700;
+  --relacionamentos:#E8607A;--relacionamentos-bg:#FDEEF1;--relacionamentos-dark:#A03050;
+  --casa:#58B4D1;--casa-bg:#E5F5FB;--casa-dark:#2E7A96;
+  --lazer:#F47B35;--lazer-bg:#FDEEE4;--lazer-dark:#A04A10;
+  --mente:#A066CC;--mente-bg:#F3EAFA;--mente-dark:#6A3A9A;
+  --trava:#E8607A;--trava-bg:#FDEEF1;--trava-dark:#A03050;
+  --flui:#F0A500;--flui-bg:#FFF4D6;--flui-dark:#9A6700;
+  --pousa:#4CAF87;--pousa-bg:#E8F7F1;--pousa-dark:#2D7A5C;
+  --nav-h:68px;--radius:16px;--radius-sm:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:430px;margin:0 auto;overflow-x:hidden}
+
+/* AUTH */
+.auth-wrap{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:32px 24px}
+.auth-logo{font-family:'Fraunces',serif;font-size:36px;font-weight:500;margin-bottom:6px}
+.auth-tagline{font-size:13px;color:var(--muted);margin-bottom:40px;font-style:italic}
+.auth-tab-row{display:flex;margin-bottom:24px;border-bottom:1.5px solid var(--border)}
+.auth-tab{flex:1;padding:10px;font-size:13px;font-weight:500;background:none;border:none;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1.5px;font-family:'DM Sans',sans-serif;transition:all .2s}
+.auth-tab.active{color:var(--text);border-bottom-color:var(--text)}
+.auth-field{margin-bottom:14px}
+.auth-field label{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:5px}
+.auth-field input{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:12px;font-size:15px;font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text);outline:none}
+.auth-field input:focus{border-color:var(--text)}
+.auth-btn{width:100%;padding:14px;background:var(--text);color:white;border:none;border-radius:12px;font-size:15px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer}
+.auth-btn:disabled{opacity:.5}
+.auth-msg{font-size:12px;color:var(--trava-dark);background:var(--trava-bg);padding:10px 14px;border-radius:10px;margin-top:12px;display:none}
+.auth-success{color:var(--saude-dark)!important;background:var(--saude-bg)!important}
+
+/* APP SHELL */
+.app-wrap{display:none}
+.screen{display:none;padding:0 0 calc(var(--nav-h)+16px);min-height:100vh}
+.screen.active{display:block}
+
+/* NAV */
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:var(--nav-h);background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;z-index:100;padding-bottom:env(safe-area-inset-bottom,8px)}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 8px;cursor:pointer;border:none;background:none;color:var(--muted);transition:color .2s}
+.nav-item.active{color:var(--text)}
+.nav-item svg{width:21px;height:21px}
+.nav-item span{font-size:10px;font-weight:500;letter-spacing:.03em}
+.nav-dot{width:4px;height:4px;border-radius:50%;background:var(--text);margin-top:-1px;display:none}
+.nav-item.active .nav-dot{display:block}
+
+/* HEADER */
+.header{padding:52px 20px 16px;background:var(--surface);border-bottom:1px solid var(--border);margin-bottom:16px}
+.header-label{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.header-title{font-family:'Fraunces',serif;font-size:28px;font-weight:500;line-height:1.1}
+.header-sub{font-size:13px;color:var(--muted);margin-top:4px}
+
+/* CARDS */
+.card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);padding:16px;margin:0 16px 12px}
+.card-title{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:0 16px 12px}
+.stat-box{background:var(--surface);border-radius:var(--radius-sm);border:1px solid var(--border);padding:12px 10px;text-align:center}
+.stat-num{font-family:'Fraunces',serif;font-size:26px;font-weight:500;line-height:1}
+.stat-lbl{font-size:10px;color:var(--muted);margin-top:3px;font-weight:500}
+
+/* WEEKLY CALENDAR */
+.cal-wrap{background:var(--surface);border-bottom:1px solid var(--border);overflow:hidden}
+.cal-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 8px}
+.cal-month{font-family:'Fraunces',serif;font-size:16px;font-weight:500}
+.cal-nav-btn{background:none;border:none;cursor:pointer;color:var(--muted);padding:4px 8px;font-size:16px}
+.cal-days-row{display:grid;grid-template-columns:repeat(7,1fr);padding:0 8px 8px;gap:4px}
+.cal-day{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;border-radius:10px;cursor:pointer;transition:background .15s}
+.cal-day.selected{background:var(--text)}
+.cal-day.today .cal-day-num{color:var(--carreira)}
+.cal-day.selected .cal-day-name,.cal-day.selected .cal-day-num{color:white}
+.cal-day-name{font-size:10px;color:var(--muted);font-weight:500;text-transform:uppercase}
+.cal-day.selected .cal-day-name{color:rgba(255,255,255,.7)}
+.cal-day-num{font-size:15px;font-weight:500;color:var(--text)}
+.cal-dot-row{display:flex;gap:2px;justify-content:center;min-height:6px}
+.cal-dot{width:4px;height:4px;border-radius:50%}
+.cal-selected-label{font-size:12px;color:var(--muted);padding:0 16px 10px;font-family:'Fraunces',serif;font-style:italic}
+
+/* DAY EVENTS */
+.day-event{display:flex;gap:10px;align-items:flex-start;padding:8px 16px;border-bottom:1px solid var(--border);background:var(--surface)}
+.day-event:first-child{border-top:1px solid var(--border)}
+.day-event-time{font-size:12px;font-weight:500;color:var(--muted);min-width:40px;padding-top:1px;flex-shrink:0}
+.day-event-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.day-event-name{font-size:13px;color:var(--text);line-height:1.4}
+.day-event-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.day-event-type{font-size:10px;padding:1px 7px;border-radius:8px;background:var(--faint);color:var(--muted);display:inline-block;margin-top:3px}
+
+/* TASKS */
+.task-item{display:flex;gap:10px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--border);transition:opacity .2s}
+.task-item:last-child{border-bottom:none;padding-bottom:0}
+.task-item.done-item{opacity:.55}
+.task-check{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--border);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .2s;cursor:pointer}
+.task-check.done{background:var(--saude);border-color:var(--saude)}
+.task-check.done::after{content:'✓';color:white;font-size:12px;font-weight:600}
+.task-text{font-size:14px;color:var(--text);line-height:1.4}
+.task-text.done{text-decoration:line-through;color:var(--muted)}
+.task-why{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
+.task-meta{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap;align-items:center}
+.area-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:500;padding:3px 8px;border-radius:20px}
+.status-pill{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px}
+.timer-badge{font-size:10px;color:var(--muted);background:var(--faint);padding:2px 7px;border-radius:20px}
+.time-badge{font-size:10px;background:var(--carreira-bg);color:var(--carreira-dark);padding:2px 7px;border-radius:20px}
+.item-actions{display:flex;gap:6px;margin-top:6px}
+.action-btn{font-size:11px;padding:3px 9px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif}
+.action-btn.del{color:var(--trava-dark);border-color:var(--trava-bg)}
+
+/* COMPROMISSOS */
+.comp-item{display:flex;gap:10px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--border)}
+.comp-item:last-child{border-bottom:none;padding-bottom:0}
+.comp-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.comp-name{font-size:14px;color:var(--text);font-weight:500}
+.comp-sub{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* METAS */
+.meta-card{border-radius:var(--radius);padding:16px;margin:0 16px 10px;border:1px solid var(--border);background:var(--surface)}
+.meta-name{font-family:'Fraunces',serif;font-size:16px;font-weight:500;line-height:1.2}
+.meta-msg{font-size:12px;color:var(--muted);margin:6px 0 8px;line-height:1.5}
+.meta-msg strong{color:var(--text);font-weight:500}
+.bar-bg{height:6px;background:var(--faint);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;transition:width .5s ease}
+
+/* AREAS */
+.areas-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px}
+.area-card{border-radius:var(--radius);padding:16px;border:1px solid var(--border);background:var(--surface);transition:transform .15s}
+.area-card:active{transform:scale(.97)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--surface);border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-width:430px;transform:translateY(40px);transition:transform .3s ease;max-height:90vh;overflow-y:auto}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-title{font-family:'Fraunces',serif;font-size:20px;font-weight:500;margin-bottom:16px}
+.field{margin-bottom:12px}
+.field label{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:5px}
+.field input,.field select,.field textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--text)}
+.field textarea{resize:none;height:60px}
+.pill-select{display:flex;gap:6px;flex-wrap:wrap}
+.ps-pill{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:500;border:1.5px solid var(--border);cursor:pointer;background:var(--surface);color:var(--muted);transition:all .15s}
+.ps-pill.active{border-color:var(--text);color:var(--text);background:var(--faint)}
+.btn-save{width:100%;padding:14px;background:var(--text);color:white;border:none;border-radius:12px;font-size:15px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;margin-top:8px}
+.btn-save:disabled{opacity:.5;cursor:not-allowed}
+.btn-danger{width:100%;padding:12px;background:none;color:var(--trava-dark);border:1px solid var(--trava-bg);border-radius:12px;font-size:14px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;margin-top:6px}
+.comp-type-row{display:flex;gap:8px}
+.comp-type-btn{flex:1;padding:8px;border-radius:10px;border:1.5px solid var(--border);font-size:12px;font-weight:500;cursor:pointer;background:var(--surface);color:var(--muted);font-family:'DM Sans',sans-serif}
+.comp-type-btn.active{border-color:var(--text);background:var(--faint);color:var(--text)}
+
+/* TIMER */
+.timer-display{font-family:'Fraunces',serif;font-size:54px;font-weight:300;text-align:center;padding:24px 0 16px}
+.timer-task-name{text-align:center;font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.4}
+.timer-btns{display:flex;gap:10px}
+.timer-btns button{flex:1;padding:12px;border-radius:12px;font-size:14px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--faint);color:var(--text)}
+.timer-btns .btn-primary{background:var(--text);color:white;border-color:var(--text)}
+
+/* MISC */
+.section-divider{padding:8px 16px 4px;font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.07em;text-transform:uppercase}
+.empty-state{text-align:center;padding:24px 16px;color:var(--muted);font-size:13px}
+.add-inline-btn{width:100%;margin-top:8px;padding:9px;font-size:12px;border:1px dashed var(--border);border-radius:10px;background:none;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif}
+.fab{position:fixed;bottom:calc(var(--nav-h)+16px);right:calc(50% - 215px + 16px);width:48px;height:48px;border-radius:50%;background:var(--text);color:white;border:none;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:99;box-shadow:0 4px 16px rgba(0,0,0,.15);transition:transform .15s}
+.fab:active{transform:scale(.94)}
+.loading-screen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:12px}
+.loading-logo{font-family:'Fraunces',serif;font-size:32px;font-weight:500}
+.loading-dot{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
+.sync-badge{font-size:10px;padding:2px 8px;border-radius:10px;background:var(--saude-bg);color:var(--saude-dark);margin-left:8px}
+.sync-badge.syncing{background:var(--financas-bg);color:var(--financas-dark)}
+.sync-badge.error{background:var(--trava-bg);color:var(--trava-dark)}
+.notif-badge{font-size:10px;background:var(--mente-bg);color:var(--mente-dark);padding:2px 7px;border-radius:20px}
+.recurrent-section{background:var(--faint);border-radius:10px;padding:10px 12px;margin-bottom:10px}
+.recurrent-section-title{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.rec-template{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.rec-template:last-child{border-bottom:none;padding-bottom:0}
+.rec-template-name{font-size:13px;color:var(--text)}
+.rec-template-meta{font-size:11px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<div class="loading-screen" id="loading">
+  <div class="loading-logo">Luana 360</div>
+  <div class="loading-dot"></div>
+</div>
+
+<!-- AUTH -->
+<div class="auth-wrap" id="auth-wrap" style="display:none">
+  <div class="auth-logo">Luana 360 ✦</div>
+  <div class="auth-tagline">"Todo compromisso resolve algo. E resolver atrai calma."</div>
+  <div class="auth-tab-row">
+    <button class="auth-tab active" onclick="switchTab('login')">Entrar</button>
+    <button class="auth-tab" onclick="switchTab('signup')">Criar conta</button>
+  </div>
+  <div class="auth-field"><label>Email</label><input type="email" id="auth-email" placeholder="seu@email.com" autocomplete="email"></div>
+  <div class="auth-field"><label>Senha</label><input type="password" id="auth-password" placeholder="sua senha" autocomplete="current-password"></div>
+  <div class="auth-field" id="auth-name-field" style="display:none"><label>Seu nome</label><input type="text" id="auth-name" placeholder="Como quer ser chamada?"></div>
+  <button class="auth-btn" id="auth-btn" onclick="doAuth()">Entrar</button>
+  <div class="auth-msg" id="auth-msg"></div>
+</div>
+
+<!-- APP -->
+<div class="app-wrap" id="app-wrap">
+
+  <!-- HOJE -->
+  <div id="s-hoje" class="screen active">
+    <div class="header">
+      <div class="header-label" id="hdr-dia"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="header-title" id="hdr-greeting">Oi! ✦</div>
+        <span class="sync-badge" id="sync-badge">salvo ✓</span>
+      </div>
+      <div class="header-sub" id="hdr-sub"></div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-num" id="st-feitas" style="color:var(--saude)">0</div><div class="stat-lbl">feitas hoje</div></div>
+      <div class="stat-box"><div class="stat-num" id="st-total">0</div><div class="stat-lbl">tarefas</div></div>
+      <div class="stat-box"><div class="stat-num" id="st-metas" style="color:var(--carreira)">0</div><div class="stat-lbl">metas</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">compromissos de hoje</div>
+      <div id="hoje-comps"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">tarefas pendentes</div>
+      <div id="hoje-tasks"></div>
+      <button class="add-inline-btn" onclick="openAddTask()">+ nova tarefa</button>
+    </div>
+    <div class="card" style="border-left:3px solid var(--saude)">
+      <div style="font-family:'Fraunces',serif;font-size:13px;color:var(--muted);font-style:italic;line-height:1.6">"Todo compromisso resolve algo. E resolver atrai calma."</div>
+    </div>
+  </div>
+
+  <!-- AGENDA -->
+  <div id="s-agenda" class="screen">
+    <div class="header" style="padding-bottom:0">
+      <div class="header-label">agenda</div>
+      <div class="header-title">Semana</div>
+    </div>
+    <div class="cal-wrap">
+      <div class="cal-header">
+        <button class="cal-nav-btn" onclick="calWeekOffset(-1)">‹</button>
+        <div class="cal-month" id="cal-month-label"></div>
+        <button class="cal-nav-btn" onclick="calWeekOffset(1)">›</button>
+      </div>
+      <div class="cal-days-row" id="cal-days-row"></div>
+      <div class="cal-selected-label" id="cal-selected-label"></div>
+    </div>
+    <div id="agenda-day-events" style="margin-top:8px"></div>
+  </div>
+
+  <!-- TAREFAS -->
+  <div id="s-tarefas" class="screen">
+    <div class="header">
+      <div class="header-label">o que fazer</div>
+      <div class="header-title">Tarefas</div>
+    </div>
+    <div id="tasks-trava-section"></div>
+    <div id="tasks-flui-section"></div>
+    <div id="tasks-pousa-section"></div>
+    <div id="tasks-done-section"></div>
+  </div>
+
+  <!-- COMPROMISSOS -->
+  <div id="s-compromissos" class="screen">
+    <div class="header">
+      <div class="header-label">fixos com horário e local</div>
+      <div class="header-title">Compromissos</div>
+    </div>
+    <div id="comp-fixo-section"></div>
+    <div id="comp-variavel-section"></div>
+    <div id="comp-pessoal-section"></div>
+  </div>
+
+  <!-- METAS -->
+  <div id="s-metas" class="screen">
+    <div class="header">
+      <div class="header-label">grandes objetivos</div>
+      <div class="header-title">Metas do ano</div>
+    </div>
+    <div id="metas-list"></div>
+    <div style="margin:0 16px">
+      <button class="add-inline-btn" onclick="openAddMeta()">+ nova meta</button>
+    </div>
+  </div>
+
+  <!-- AREAS -->
+  <div id="s-areas" class="screen">
+    <div class="header">
+      <div class="header-label">sua vida em</div>
+      <div class="header-title">7 áreas</div>
+    </div>
+    <div class="areas-grid" id="areas-grid"></div>
+    <div class="card" style="margin-top:12px">
+      <div class="card-title">conta</div>
+      <div style="font-size:14px;color:var(--text);margin-bottom:4px" id="perfil-email"></div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Dados sincronizados na nuvem</div>
+      <button onclick="exportData()" style="width:100%;padding:10px;background:var(--text);color:white;border:none;border-radius:10px;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;margin-bottom:8px">Exportar backup (.json)</button>
+      <button onclick="doLogout()" style="width:100%;padding:10px;background:none;color:var(--trava-dark);border:1px solid var(--trava-bg);border-radius:10px;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer">Sair da conta</button>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <button class="nav-item active" id="nav-hoje" onclick="goTo('hoje')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      <span>hoje</span><div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" id="nav-agenda" onclick="goTo('agenda')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <span>agenda</span><div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" id="nav-tarefas" onclick="goTo('tarefas')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      <span>tarefas</span><div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" id="nav-compromissos" onclick="goTo('compromissos')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>compromissos</span><div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" id="nav-metas" onclick="goTo('metas')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+      <span>metas</span><div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" id="nav-areas" onclick="goTo('areas')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span>áreas</span><div class="nav-dot"></div>
+    </button>
+  </nav>
+
+  <button class="fab" id="fab" onclick="onFab()" aria-label="adicionar">+</button>
+</div>
+
+<!-- MODAL TAREFA -->
+<div class="modal-overlay" id="modal-task" onclick="closeModal('modal-task')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-title" id="modal-task-title">Nova tarefa</div>
+    <input type="hidden" id="nt-edit-id">
+
+    <div id="rec-templates-section" class="recurrent-section" style="display:none">
+      <div class="recurrent-section-title">tarefas recorrentes salvas</div>
+      <div id="rec-templates-list"></div>
+    </div>
+
+    <div class="field"><label>O quê?</label><input id="nt-texto" placeholder="descreva a tarefa..."></div>
+    <div class="field"><label>Por quê resolve?</label><input id="nt-porque" placeholder="qual problema isso elimina?"></div>
+    <div class="field"><label>Meta vinculada</label><select id="nt-meta"></select></div>
+    <div class="field"><label>Área</label>
+      <select id="nt-area">
+        <option value="saude">🌿 Saúde</option><option value="carreira">📚 Carreira</option>
+        <option value="financas">💛 Finanças</option><option value="relacionamentos">🌸 Relacionamentos</option>
+        <option value="casa">🏡 Casa</option><option value="lazer">🎈 Lazer</option><option value="mente">🌙 Mente</option>
+      </select>
+    </div>
+    <div class="field"><label>Status</label>
+      <div class="pill-select" id="nt-status-pills">
+        <div class="ps-pill active" data-v="flui" onclick="selectPill('nt-status-pills',this)">flui</div>
+        <div class="ps-pill" data-v="trava" onclick="selectPill('nt-status-pills',this)">trava</div>
+        <div class="ps-pill" data-v="pousa" onclick="selectPill('nt-status-pills',this)">pousa</div>
+      </div>
+    </div>
+    <div class="field"><label>Horário (opcional)</label><input type="time" id="nt-hora" placeholder="--:--"></div>
+    <div class="field"><label>Data (opcional)</label><input type="date" id="nt-data"></div>
+    <div class="field"><label>É recorrente?</label>
+      <div class="pill-select" id="nt-rec-pills">
+        <div class="ps-pill" data-v="sim" onclick="selectPill('nt-rec-pills',this)">sim</div>
+        <div class="ps-pill active" data-v="nao" onclick="selectPill('nt-rec-pills',this)">não</div>
+      </div>
+    </div>
+    <div class="field"><label>Notificação</label>
+      <div class="pill-select" id="nt-notif-pills">
+        <div class="ps-pill active" data-v="nao" onclick="selectPill('nt-notif-pills',this)">sem notificação</div>
+        <div class="ps-pill" data-v="sim" onclick="selectPill('nt-notif-pills',this)">notificar no horário</div>
+      </div>
+    </div>
+    <button class="btn-save" id="nt-save-btn" onclick="saveTask()">Adicionar tarefa</button>
+    <button class="btn-danger" id="nt-delete-btn" style="display:none" onclick="deleteTask()">Excluir tarefa</button>
+  </div>
+</div>
+
+<!-- MODAL COMPROMISSO -->
+<div class="modal-overlay" id="modal-comp" onclick="closeModal('modal-comp')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-title" id="modal-comp-title">Novo compromisso</div>
+    <input type="hidden" id="nc-edit-id">
+    <div class="field"><label>Nome</label><input id="nc-nome" placeholder="nome do compromisso..."></div>
+    <div class="field"><label>Horário</label><input id="nc-hora" type="time" value="09:00"></div>
+    <div class="field"><label>Local (opcional)</label><input id="nc-local" placeholder="onde vai acontecer?"></div>
+    <div class="field"><label>Data (opcional)</label><input type="date" id="nc-data"></div>
+    <div class="field"><label>Tipo</label>
+      <div class="comp-type-row">
+        <button class="comp-type-btn active" id="ct-fixo" onclick="setCompType('fixo')">Fixo</button>
+        <button class="comp-type-btn" id="ct-variavel" onclick="setCompType('variavel')">Variável</button>
+        <button class="comp-type-btn" id="ct-pessoal" onclick="setCompType('pessoal')">Pessoal</button>
+      </div>
+    </div>
+    <div class="field"><label>Área</label>
+      <select id="nc-area">
+        <option value="carreira">📚 Carreira</option><option value="saude">🌿 Saúde</option>
+        <option value="financas">💛 Finanças</option><option value="relacionamentos">🌸 Relacionamentos</option>
+        <option value="casa">🏡 Casa</option><option value="lazer">🎈 Lazer</option><option value="mente">🌙 Mente</option>
+      </select>
+    </div>
+    <div class="field"><label>Notificação</label>
+      <div class="pill-select" id="nc-notif-pills">
+        <div class="ps-pill active" data-v="nao" onclick="selectPill('nc-notif-pills',this)">sem notificação</div>
+        <div class="ps-pill" data-v="sim" onclick="selectPill('nc-notif-pills',this)">notificar no horário</div>
+      </div>
+    </div>
+    <button class="btn-save" id="nc-save-btn" onclick="saveComp()">Adicionar compromisso</button>
+    <button class="btn-danger" id="nc-delete-btn" style="display:none" onclick="deleteComp()">Excluir compromisso</button>
+  </div>
+</div>
+
+<!-- MODAL META -->
+<div class="modal-overlay" id="modal-meta" onclick="closeModal('modal-meta')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-title" id="modal-meta-title">Nova meta</div>
+    <input type="hidden" id="nm-edit-id">
+    <div class="field"><label>Nome da meta</label><input id="nm-nome" placeholder="ex: Formar em Administração"></div>
+    <div class="field"><label>Emoji</label><input id="nm-emoji" placeholder="🎯" maxlength="2" style="font-size:20px;width:60px"></div>
+    <div class="field"><label>Área</label>
+      <select id="nm-area">
+        <option value="saude">🌿 Saúde</option><option value="carreira">📚 Carreira</option>
+        <option value="financas">💛 Finanças</option><option value="relacionamentos">🌸 Relacionamentos</option>
+        <option value="casa">🏡 Casa</option><option value="lazer">🎈 Lazer</option><option value="mente">🌙 Mente</option>
+      </select>
+    </div>
+    <div class="field"><label>Progresso atual (%)</label><input type="number" id="nm-pct" placeholder="0" min="0" max="100" value="0"></div>
+    <button class="btn-save" id="nm-save-btn" onclick="saveMeta()">Salvar meta</button>
+    <button class="btn-danger" id="nm-delete-btn" style="display:none" onclick="deleteMeta()">Excluir meta</button>
+  </div>
+</div>
+
+<!-- MODAL TIMER -->
+<div class="modal-overlay" id="modal-timer">
+  <div class="modal">
+    <div class="modal-title" style="text-align:center">Cronômetro</div>
+    <div class="timer-display" id="timer-display">00:00</div>
+    <div class="timer-task-name" id="timer-task-name"></div>
+    <div class="timer-btns">
+      <button onclick="resetTimer()">Zerar</button>
+      <button class="btn-primary" id="timer-toggle" onclick="toggleTimer()">Iniciar</button>
+      <button onclick="finishTimer()">Concluir</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL='https://vdefcjizmwkpsmqsfgka.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkZWZjaml6bXdrcHNtcXNmZ2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5MjI0MTcsImV4cCI6MjA5NTQ5ODQxN30.KsVhrhpy6JtC4t4JDTgSiGcKRki67kZ-ebItcOVjnyA';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+const AREAS={
+  saude:{label:'Saúde',emoji:'🌿',color:'var(--saude)',bg:'var(--saude-bg)',dark:'var(--saude-dark)'},
+  carreira:{label:'Carreira',emoji:'📚',color:'var(--carreira)',bg:'var(--carreira-bg)',dark:'var(--carreira-dark)'},
+  financas:{label:'Finanças',emoji:'💛',color:'var(--financas)',bg:'var(--financas-bg)',dark:'var(--financas-dark)'},
+  relacionamentos:{label:'Relacionamentos',emoji:'🌸',color:'var(--relacionamentos)',bg:'var(--relacionamentos-bg)',dark:'var(--relacionamentos-dark)'},
+  casa:{label:'Casa',emoji:'🏡',color:'var(--casa)',bg:'var(--casa-bg)',dark:'var(--casa-dark)'},
+  lazer:{label:'Lazer',emoji:'🎈',color:'var(--lazer)',bg:'var(--lazer-bg)',dark:'var(--lazer-dark)'},
+  mente:{label:'Mente',emoji:'🌙',color:'var(--mente)',bg:'var(--mente-bg)',dark:'var(--mente-dark)'},
+};
+const STATUS_CFG={
+  trava:{label:'trava',bg:'var(--trava-bg)',dark:'var(--trava-dark)'},
+  flui:{label:'flui',bg:'var(--flui-bg)',dark:'var(--flui-dark)'},
+  pousa:{label:'pousa',bg:'var(--pousa-bg)',dark:'var(--pousa-dark)'},
+};
+const DIAS_PT=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+const DIAS_SHORT=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+const MESES_PT=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const MESES_SHORT=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+
+let currentUser=null,metas=[],tasks=[],compromissos=[];
+let currentScreen='hoje',compType='fixo';
+let timerInterval=null,timerSeconds=0,timerRunning=false,activeTimerTask=null;
+let authMode='login',syncTimeout=null;
+let calWeekDelta=0,calSelectedDate=new Date();
+let notifPermission=false;
+
+// ---- NOTIFICATIONS ----
+async function requestNotifPermission(){
+  if(!('Notification' in window))return;
+  if(Notification.permission==='granted'){notifPermission=true;return;}
+  if(Notification.permission!=='denied'){
+    const p=await Notification.requestPermission();
+    notifPermission=p==='granted';
+  }
+}
+
+function scheduleNotif(title,body,dateStr,timeStr){
+  if(!notifPermission||!dateStr||!timeStr)return;
+  const dt=new Date(dateStr+'T'+timeStr);
+  const now=new Date();
+  const ms=dt-now;
+  if(ms<0)return;
+  setTimeout(()=>{
+    try{new Notification(title,{body,icon:'',badge:''});}catch(e){}
+  },ms);
+}
+
+// ---- AUTH ----
+function switchTab(mode){
+  authMode=mode;
+  document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',(i===0&&mode==='login')||(i===1&&mode==='signup')));
+  document.getElementById('auth-btn').textContent=mode==='login'?'Entrar':'Criar conta';
+  document.getElementById('auth-name-field').style.display=mode==='signup'?'block':'none';
+  document.getElementById('auth-msg').style.display='none';
+}
+async function doAuth(){
+  const email=document.getElementById('auth-email').value.trim();
+  const password=document.getElementById('auth-password').value;
+  const btn=document.getElementById('auth-btn');
+  if(!email||!password){showAuthMsg('Preencha email e senha.',false);return;}
+  btn.disabled=true;btn.textContent='...';
+  let result;
+  if(authMode==='login'){result=await sb.auth.signInWithPassword({email,password});}
+  else{const name=document.getElementById('auth-name').value.trim()||'Luana';result=await sb.auth.signUp({email,password,options:{data:{name}}});}
+  btn.disabled=false;btn.textContent=authMode==='login'?'Entrar':'Criar conta';
+  if(result.error){
+    const em={'Invalid login credentials':'Email ou senha incorretos.','User already registered':'Esse email já tem conta. Faça login.','Password should be at least 6 characters':'Senha precisa ter pelo menos 6 caracteres.'};
+    showAuthMsg(em[result.error.message]||result.error.message,false);
+  }else if(authMode==='signup'&&!result.data?.session){showAuthMsg('Conta criada! Verifique seu email para confirmar.',true);}
+}
+function showAuthMsg(msg,ok){
+  const el=document.getElementById('auth-msg');
+  el.textContent=msg;el.className='auth-msg'+(ok?' auth-success':'');el.style.display='block';
+}
+async function doLogout(){
+  await sb.auth.signOut();currentUser=null;metas=[];tasks=[];compromissos=[];
+  document.getElementById('app-wrap').style.display='none';
+  document.getElementById('auth-wrap').style.display='flex';
+  switchTab('login');
+}
+
+// ---- SYNC ----
+function setSyncBadge(state){
+  const b=document.getElementById('sync-badge');
+  if(!b)return;
+  b.textContent=state==='syncing'?'salvando...':state==='error'?'erro':'salvo ✓';
+  b.className='sync-badge'+(state!=='saved'?' '+state:'');
+}
+function debouncedSync(fn){
+  setSyncBadge('syncing');clearTimeout(syncTimeout);
+  syncTimeout=setTimeout(async()=>{const e=await fn();setSyncBadge(e?'error':'saved');},700);
+}
+
+// ---- LOAD ----
+async function loadAll(){
+  if(!currentUser)return;
+  const uid=currentUser.id;
+  const[tm,tt,tc]=await Promise.all([
+    sb.from('luana_metas').select('*').eq('user_id',uid).order('created_at'),
+    sb.from('luana_tasks').select('*').eq('user_id',uid).order('created_at'),
+    sb.from('luana_compromissos').select('*').eq('user_id',uid).order('hora'),
+  ]);
+  metas=tm.data||[];tasks=tt.data||[];compromissos=tc.data||[];
+  if(metas.length===0)await seedDefaults();
+  renderAll();
+}
+async function seedDefaults(){
+  const uid=currentUser.id;
+  const dm=[
+    {user_id:uid,nome:'Formar',area:'carreira',emoji:'🎓',pct:60,tasks_done:0},
+    {user_id:uid,nome:'Cuidar da saúde',area:'saude',emoji:'💪',pct:30,tasks_done:0},
+    {user_id:uid,nome:'Emagrecer',area:'saude',emoji:'🌱',pct:20,tasks_done:0},
+    {user_id:uid,nome:'Juntar dinheiro',area:'financas',emoji:'💰',pct:15,tasks_done:0},
+  ];
+  const{data:ms}=await sb.from('luana_metas').insert(dm).select();metas=ms||[];
+  const dt=[
+    {user_id:uid,texto:'Fazer faxina em casa',porque:'casa organizada traz paz mental',status:'flui',area:'casa',meta_id:null,done:false,recorrente:true,historico:[],hora:null,data:null,notificacao:false},
+    {user_id:uid,texto:'Estudar para o trabalho de sexta',porque:'cumprir o prazo e chegar preparada',status:'trava',area:'carreira',meta_id:metas[0]?.id||null,done:false,recorrente:false,historico:[],hora:null,data:null,notificacao:false},
+  ];
+  const{data:ts}=await sb.from('luana_tasks').insert(dt).select();tasks=ts||[];
+  const dc=[
+    {user_id:uid,nome:'Trabalho',hora:'12:00',tipo:'fixo',area:'carreira',local:'',data:null,notificacao:false},
+    {user_id:uid,nome:'Saída do trabalho',hora:'18:00',tipo:'fixo',area:'carreira',local:'',data:null,notificacao:false},
+    {user_id:uid,nome:'Academia',hora:'09:30',tipo:'variavel',area:'saude',local:'',data:null,notificacao:false},
+  ];
+  const{data:cs}=await sb.from('luana_compromissos').insert(dc).select();compromissos=cs||[];
+}
+
+function exportData(){
+  const d=JSON.stringify({metas,tasks,compromissos,exportedAt:new Date().toISOString()},null,2);
+  const b=new Blob([d],{type:'application/json'});
+  const u=URL.createObjectURL(b);
+  const a=document.createElement('a');a.href=u;a.download='luana360_backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(u);
+  showToast('Backup exportado!');
+}
+
+function showToast(msg){
+  let t=document.getElementById('toast');
+  if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;bottom:calc(var(--nav-h)+24px);left:50%;transform:translateX(-50%);background:#1A1814;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;z-index:9999;white-space:nowrap;transition:opacity .3s;pointer-events:none;max-width:90vw;text-align:center';document.body.appendChild(t);}
+  t.textContent=msg;t.style.opacity='1';clearTimeout(t._timer);t._timer=setTimeout(()=>{t.style.opacity='0';},2800);
+}
+
+// ---- NAV ----
+function goTo(screen){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('s-'+screen).classList.add('active');
+  document.getElementById('nav-'+screen).classList.add('active');
+  currentScreen=screen;
+  renderAll();
+}
+function onFab(){
+  const map={agenda:'openAddComp',compromissos:'openAddComp',tarefas:'openAddTask',metas:'openAddMeta'};
+  const fn=map[currentScreen]||'openAddTask';
+  window[fn]();
+}
+
+// ---- CALENDAR ----
+function calWeekOffset(d){calWeekDelta+=d;renderCalendar();}
+function getWeekDates(delta){
+  const today=new Date();today.setHours(0,0,0,0);
+  const dow=today.getDay();
+  const monday=new Date(today);monday.setDate(today.getDate()-dow+1+delta*7);
+  return Array.from({length:7},(_,i)=>{const d=new Date(monday);d.setDate(monday.getDate()+i);return d;});
+}
+function isSameDay(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate();}
+function dateStr(d){return d.toISOString().slice(0,10);}
+
+function renderCalendar(){
+  const days=getWeekDates(calWeekDelta);
+  const today=new Date();today.setHours(0,0,0,0);
+  const months=[...new Set(days.map(d=>d.getMonth()))];
+  const label=months.map(m=>MESES_PT[m]).join(' / ')+' '+days[0].getFullYear();
+  document.getElementById('cal-month-label').textContent=label;
+
+  const row=document.getElementById('cal-days-row');
+  row.innerHTML=days.map(d=>{
+    const ds=dateStr(d);
+    const dayComps=compromissos.filter(c=>!c.data||c.data===ds);
+    const dayTasks=tasks.filter(t=>t.data===ds&&!t.done);
+    const isToday=isSameDay(d,today);
+    const isSel=isSameDay(d,calSelectedDate);
+    const dots=[...dayComps.slice(0,2).map(c=>`<div class="cal-dot" style="background:${AREAS[c.area]?.color||'var(--muted)'}"></div>`),
+                ...dayTasks.slice(0,1).map(t=>`<div class="cal-dot" style="background:var(--trava)"></div>`)].join('');
+    return `<div class="cal-day${isToday?' today':''}${isSel?' selected':''}" onclick="calSelectDay(${d.getTime()})">
+      <div class="cal-day-name">${DIAS_SHORT[d.getDay()]}</div>
+      <div class="cal-day-num">${d.getDate()}</div>
+      <div class="cal-dot-row">${dots}</div>
+    </div>`;
+  }).join('');
+
+  const selLabel=DIAS_PT[calSelectedDate.getDay()]+', '+calSelectedDate.getDate()+' de '+MESES_PT[calSelectedDate.getMonth()];
+  document.getElementById('cal-selected-label').textContent=selLabel;
+  renderDayEvents();
+}
+
+function calSelectDay(ts){
+  calSelectedDate=new Date(ts);
+  renderCalendar();
+}
+
+function renderDayEvents(){
+  const ds=dateStr(calSelectedDate);
+  const dayComps=compromissos.filter(c=>!c.data||c.data===ds).sort((a,b)=>a.hora.localeCompare(b.hora));
+  const dayTasks=tasks.filter(t=>t.data===ds||(!t.data&&isSameDay(calSelectedDate,new Date()))).filter(t=>!t.done).sort((a,b)=>(a.hora||'99:99').localeCompare(b.hora||'99:99'));
+  const all=[
+    ...dayComps.map(c=>({...c,_type:'comp'})),
+    ...dayTasks.map(t=>({...t,_type:'task'})),
+  ].sort((a,b)=>(a.hora||'99:99').localeCompare(b.hora||'99:99'));
+
+  const el=document.getElementById('agenda-day-events');
+  if(!all.length){el.innerHTML='<div class="empty-state">Nenhum evento neste dia</div>';return;}
+  el.innerHTML=all.map(ev=>{
+    const a=AREAS[ev.area]||AREAS.carreira;
+    if(ev._type==='comp'){
+      return `<div class="day-event">
+        <div class="day-event-time">${ev.hora||'—'}</div>
+        <div class="day-event-dot" style="background:${a.color}"></div>
+        <div>
+          <div class="day-event-name">${ev.nome}</div>
+          ${ev.local?`<div class="day-event-sub">📍 ${ev.local}</div>`:''}
+          <div><span class="day-event-type">${ev.tipo}</span> <span class="day-event-type" style="background:${a.bg};color:${a.dark}">${a.emoji} ${a.label}</span></div>
+        </div>
+        <button onclick="openEditComp('${ev.id}')" style="margin-left:auto;background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px">✎</button>
+      </div>`;
+    } else {
+      return `<div class="day-event">
+        <div class="day-event-time">${ev.hora||'—'}</div>
+        <div class="day-event-dot" style="background:var(--trava)"></div>
+        <div style="flex:1">
+          <div class="day-event-name">${ev.texto}</div>
+          <div class="day-event-sub">${ev.porque}</div>
+          <div><span class="day-event-type" style="background:${STATUS_CFG[ev.status]?.bg};color:${STATUS_CFG[ev.status]?.dark}">${ev.status}</span></div>
+        </div>
+        <div class="task-check${ev.done?' done':''}" onclick="toggleTask('${ev.id}')" style="margin-left:8px;flex-shrink:0"></div>
+      </div>`;
+    }
+  }).join('');
+}
+
+// ---- MODALS ----
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function selectPill(groupId,el){
+  document.querySelectorAll('#'+groupId+' .ps-pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+}
+function getActivePill(groupId){const el=document.querySelector('#'+groupId+' .ps-pill.active');return el?el.dataset.v:null;}
+function setCompType(t){compType=t;['fixo','variavel','pessoal'].forEach(x=>document.getElementById('ct-'+x).classList.toggle('active',x===t));}
+
+// ---- TASK MODAL ----
+function openAddTask(){
+  document.getElementById('modal-task-title').textContent='Nova tarefa';
+  document.getElementById('nt-edit-id').value='';
+  document.getElementById('nt-texto').value='';
+  document.getElementById('nt-porque').value='';
+  document.getElementById('nt-hora').value='';
+  document.getElementById('nt-data').value='';
+  document.getElementById('nt-save-btn').textContent='Adicionar tarefa';
+  document.getElementById('nt-delete-btn').style.display='none';
+  selectPill('nt-status-pills',document.querySelector('#nt-status-pills [data-v="flui"]'));
+  selectPill('nt-rec-pills',document.querySelector('#nt-rec-pills [data-v="nao"]'));
+  selectPill('nt-notif-pills',document.querySelector('#nt-notif-pills [data-v="nao"]'));
+
+  const sel=document.getElementById('nt-meta');
+  sel.innerHTML='<option value="">— sem meta —</option>';
+  metas.forEach(m=>{sel.innerHTML+=`<option value="${m.id}">${AREAS[m.area]?.emoji||''} ${m.nome}</option>`;});
+
+  const recTasks=tasks.filter(t=>t.recorrente);
+  const recSec=document.getElementById('rec-templates-section');
+  if(recTasks.length){
+    recSec.style.display='block';
+    document.getElementById('rec-templates-list').innerHTML=recTasks.map(t=>{
+      const a=AREAS[t.area];
+      return `<div class="rec-template" onclick="fillFromTemplate('${t.id}')">
+        <div><div class="rec-template-name">${t.texto}</div><div class="rec-template-meta">${a?.emoji||''} ${a?.label||''} · ${t.porque}</div></div>
+        <span style="color:var(--muted);font-size:14px">→</span>
+      </div>`;
+    }).join('');
+  } else { recSec.style.display='none'; }
+  document.getElementById('modal-task').classList.add('open');
+}
+
+function fillFromTemplate(id){
+  const t=tasks.find(x=>x.id===id);if(!t)return;
+  document.getElementById('nt-texto').value=t.texto;
+  document.getElementById('nt-porque').value=t.porque;
+  document.getElementById('nt-area').value=t.area;
+  document.getElementById('nt-meta').value=t.meta_id||'';
+  selectPill('nt-status-pills',document.querySelector(`#nt-status-pills [data-v="${t.status}"]`)||document.querySelector('#nt-status-pills [data-v="flui"]'));
+  selectPill('nt-rec-pills',document.querySelector('#nt-rec-pills [data-v="sim"]'));
+}
+
+function openEditTask(id){
+  const t=tasks.find(x=>x.id===id);if(!t)return;
+  document.getElementById('modal-task-title').textContent='Editar tarefa';
+  document.getElementById('nt-edit-id').value=id;
+  document.getElementById('nt-texto').value=t.texto;
+  document.getElementById('nt-porque').value=t.porque;
+  document.getElementById('nt-hora').value=t.hora||'';
+  document.getElementById('nt-data').value=t.data||'';
+  document.getElementById('nt-area').value=t.area;
+  document.getElementById('nt-save-btn').textContent='Salvar alterações';
+  document.getElementById('nt-delete-btn').style.display='block';
+  document.getElementById('rec-templates-section').style.display='none';
+
+  const sel=document.getElementById('nt-meta');
+  sel.innerHTML='<option value="">— sem meta —</option>';
+  metas.forEach(m=>{sel.innerHTML+=`<option value="${m.id}"${m.id===t.meta_id?' selected':''}>${AREAS[m.area]?.emoji||''} ${m.nome}</option>`;});
+
+  const spEl=document.querySelector(`#nt-status-pills [data-v="${t.status}"]`)||document.querySelector('#nt-status-pills [data-v="flui"]');
+  selectPill('nt-status-pills',spEl);
+  selectPill('nt-rec-pills',document.querySelector(`#nt-rec-pills [data-v="${t.recorrente?'sim':'nao'}"]`));
+  selectPill('nt-notif-pills',document.querySelector(`#nt-notif-pills [data-v="${t.notificacao?'sim':'nao'}"]`));
+  document.getElementById('modal-task').classList.add('open');
+}
+
+async function saveTask(){
+  const texto=document.getElementById('nt-texto').value.trim();if(!texto)return;
+  const editId=document.getElementById('nt-edit-id').value;
+  const btn=document.getElementById('nt-save-btn');btn.disabled=true;
+  const hora=document.getElementById('nt-hora').value||null;
+  const data=document.getElementById('nt-data').value||null;
+  const notif=getActivePill('nt-notif-pills')==='sim';
+  const payload={
+    texto,
+    porque:document.getElementById('nt-porque').value.trim()||'resolve algo importante',
+    status:getActivePill('nt-status-pills')||'flui',
+    area:document.getElementById('nt-area').value,
+    meta_id:document.getElementById('nt-meta').value||null,
+    recorrente:getActivePill('nt-rec-pills')==='sim',
+    hora,data,notificacao:notif,
+  };
+  if(editId){
+    const{error}=await sb.from('luana_tasks').update(payload).eq('id',editId);
+    if(!error){const i=tasks.findIndex(x=>x.id===editId);if(i>=0)tasks[i]={...tasks[i],...payload};showToast('Tarefa atualizada!');}
+  } else {
+    payload.user_id=currentUser.id;payload.done=false;payload.historico=[];
+    const{data:d,error}=await sb.from('luana_tasks').insert(payload).select().single();
+    if(!error&&d){tasks.push(d);showToast('Tarefa adicionada!');}
+  }
+  btn.disabled=false;
+  if(notif&&hora&&data){scheduleNotif('Luana 360 — '+texto,payload.porque,data,hora);}
+  closeModal('modal-task');setSyncBadge('saved');renderAll();
+}
+
+async function deleteTask(){
+  const id=document.getElementById('nt-edit-id').value;if(!id)return;
+  if(!confirm('Excluir esta tarefa?'))return;
+  await sb.from('luana_tasks').delete().eq('id',id);
+  tasks=tasks.filter(x=>x.id!==id);
+  closeModal('modal-task');showToast('Tarefa excluída.');renderAll();
+}
+
+async function toggleTask(id){
+  const t=tasks.find(x=>x.id===id);if(!t)return;
+  if(!t.done&&t.recorrente){startTimer(t);return;}
+  t.done=!t.done;
+  if(t.meta_id){const m=metas.find(x=>x.id===t.meta_id);if(m){m.tasks_done=Math.max(0,(m.tasks_done||0)+(t.done?1:-1));debouncedSync(()=>sb.from('luana_metas').update({tasks_done:m.tasks_done}).eq('id',m.id).then(r=>r.error));}}
+  debouncedSync(()=>sb.from('luana_tasks').update({done:t.done}).eq('id',t.id).then(r=>r.error));
+  renderAll();
+}
+
+// ---- COMP MODAL ----
+function openAddComp(){
+  document.getElementById('modal-comp-title').textContent='Novo compromisso';
+  document.getElementById('nc-edit-id').value='';
+  document.getElementById('nc-nome').value='';
+  document.getElementById('nc-hora').value='09:00';
+  document.getElementById('nc-local').value='';
+  document.getElementById('nc-data').value='';
+  document.getElementById('nc-save-btn').textContent='Adicionar compromisso';
+  document.getElementById('nc-delete-btn').style.display='none';
+  setCompType('fixo');
+  selectPill('nc-notif-pills',document.querySelector('#nc-notif-pills [data-v="nao"]'));
+  document.getElementById('modal-comp').classList.add('open');
+}
+
+function openEditComp(id){
+  const c=compromissos.find(x=>x.id===id);if(!c)return;
+  document.getElementById('modal-comp-title').textContent='Editar compromisso';
+  document.getElementById('nc-edit-id').value=id;
+  document.getElementById('nc-nome').value=c.nome;
+  document.getElementById('nc-hora').value=c.hora;
+  document.getElementById('nc-local').value=c.local||'';
+  document.getElementById('nc-data').value=c.data||'';
+  document.getElementById('nc-area').value=c.area;
+  document.getElementById('nc-save-btn').textContent='Salvar alterações';
+  document.getElementById('nc-delete-btn').style.display='block';
+  setCompType(c.tipo||'fixo');
+  selectPill('nc-notif-pills',document.querySelector(`#nc-notif-pills [data-v="${c.notificacao?'sim':'nao'}"]`));
+  document.getElementById('modal-comp').classList.add('open');
+}
+
+async function saveComp(){
+  const nome=document.getElementById('nc-nome').value.trim();if(!nome)return;
+  const editId=document.getElementById('nc-edit-id').value;
+  const btn=document.getElementById('nc-save-btn');btn.disabled=true;
+  const hora=document.getElementById('nc-hora').value||'09:00';
+  const data=document.getElementById('nc-data').value||null;
+  const notif=getActivePill('nc-notif-pills')==='sim';
+  const payload={nome,hora,tipo:compType,area:document.getElementById('nc-area').value,local:document.getElementById('nc-local').value.trim(),data,notificacao:notif};
+  if(editId){
+    const{error}=await sb.from('luana_compromissos').update(payload).eq('id',editId);
+    if(!error){const i=compromissos.findIndex(x=>x.id===editId);if(i>=0)compromissos[i]={...compromissos[i],...payload};showToast('Compromisso atualizado!');}
+  } else {
+    payload.user_id=currentUser.id;
+    const{data:d,error}=await sb.from('luana_compromissos').insert(payload).select().single();
+    if(!error&&d){compromissos.push(d);showToast('Compromisso adicionado!');}
+  }
+  btn.disabled=false;
+  if(notif&&hora&&data){scheduleNotif('Luana 360 — '+nome,payload.local||'Compromisso no horário',data,hora);}
+  closeModal('modal-comp');setSyncBadge('saved');renderAll();
+}
+
+async function deleteComp(){
+  const id=document.getElementById('nc-edit-id').value;if(!id)return;
+  if(!confirm('Excluir este compromisso?'))return;
+  await sb.from('luana_compromissos').delete().eq('id',id);
+  compromissos=compromissos.filter(x=>x.id!==id);
+  closeModal('modal-comp');showToast('Compromisso excluído.');renderAll();
+}
+
+// ---- META MODAL ----
+function openAddMeta(){
+  document.getElementById('modal-meta-title').textContent='Nova meta';
+  document.getElementById('nm-edit-id').value='';
+  document.getElementById('nm-nome').value='';
+  document.getElementById('nm-emoji').value='🎯';
+  document.getElementById('nm-area').value='carreira';
+  document.getElementById('nm-pct').value='0';
+  document.getElementById('nm-save-btn').textContent='Salvar meta';
+  document.getElementById('nm-delete-btn').style.display='none';
+  document.getElementById('modal-meta').classList.add('open');
+}
+
+function openEditMeta(id){
+  const m=metas.find(x=>x.id===id);if(!m)return;
+  document.getElementById('modal-meta-title').textContent='Editar meta';
+  document.getElementById('nm-edit-id').value=id;
+  document.getElementById('nm-nome').value=m.nome;
+  document.getElementById('nm-emoji').value=m.emoji||'🎯';
+  document.getElementById('nm-area').value=m.area;
+  document.getElementById('nm-pct').value=m.pct||0;
+  document.getElementById('nm-save-btn').textContent='Salvar alterações';
+  document.getElementById('nm-delete-btn').style.display='block';
+  document.getElementById('modal-meta').classList.add('open');
+}
+
+async function saveMeta(){
+  const nome=document.getElementById('nm-nome').value.trim();if(!nome)return;
+  const editId=document.getElementById('nm-edit-id').value;
+  const btn=document.getElementById('nm-save-btn');btn.disabled=true;
+  const payload={nome,emoji:document.getElementById('nm-emoji').value||'🎯',area:document.getElementById('nm-area').value,pct:parseInt(document.getElementById('nm-pct').value)||0};
+  if(editId){
+    const{error}=await sb.from('luana_metas').update(payload).eq('id',editId);
+    if(!error){const i=metas.findIndex(x=>x.id===editId);if(i>=0)metas[i]={...metas[i],...payload};showToast('Meta atualizada!');}
+  } else {
+    payload.user_id=currentUser.id;payload.tasks_done=0;
+    const{data:d,error}=await sb.from('luana_metas').insert(payload).select().single();
+    if(!error&&d){metas.push(d);showToast('Meta adicionada!');}
+  }
+  btn.disabled=false;closeModal('modal-meta');setSyncBadge('saved');renderAll();
+}
+
+async function deleteMeta(){
+  const id=document.getElementById('nm-edit-id').value;if(!id)return;
+  if(!confirm('Excluir esta meta?'))return;
+  await sb.from('luana_metas').delete().eq('id',id);
+  metas=metas.filter(x=>x.id!==id);
+  tasks.forEach(t=>{if(t.meta_id===id){t.meta_id=null;sb.from('luana_tasks').update({meta_id:null}).eq('id',t.id);}});
+  closeModal('modal-meta');showToast('Meta excluída.');renderAll();
+}
+
+async function updateMetaPct(id,val){
+  const m=metas.find(x=>x.id===id);if(!m)return;
+  m.pct=parseInt(val);
+  debouncedSync(()=>sb.from('luana_metas').update({pct:m.pct}).eq('id',id).then(r=>r.error));
+  document.querySelectorAll('.meta-card').forEach(card=>{
+    const inp=card.querySelector('input[type=range]');
+    if(inp&&inp.getAttribute('oninput')?.includes(id)){
+      const fill=card.querySelector('.bar-fill');if(fill)fill.style.width=val+'%';
+      const pctEl=card.querySelector('.meta-pct-num');if(pctEl)pctEl.textContent=val+'%';
+    }
+  });
+}
+
+// ---- TIMER ----
+function startTimer(task){
+  activeTimerTask=task;timerSeconds=0;timerRunning=false;
+  document.getElementById('timer-display').textContent='00:00';
+  document.getElementById('timer-task-name').textContent=task.texto;
+  document.getElementById('timer-toggle').textContent='Iniciar';
+  document.getElementById('modal-timer').classList.add('open');
+}
+function toggleTimer(){
+  if(timerRunning){clearInterval(timerInterval);timerRunning=false;document.getElementById('timer-toggle').textContent='Continuar';}
+  else{timerRunning=true;document.getElementById('timer-toggle').textContent='Pausar';
+    timerInterval=setInterval(()=>{timerSeconds++;const m=String(Math.floor(timerSeconds/60)).padStart(2,'0'),s=String(timerSeconds%60).padStart(2,'0');document.getElementById('timer-display').textContent=m+':'+s;},1000);}
+}
+function resetTimer(){clearInterval(timerInterval);timerRunning=false;timerSeconds=0;document.getElementById('timer-display').textContent='00:00';document.getElementById('timer-toggle').textContent='Iniciar';}
+async function finishTimer(){
+  clearInterval(timerInterval);timerRunning=false;
+  if(activeTimerTask&&timerSeconds>0){
+    const t=activeTimerTask;
+    t.historico=[...(t.historico||[]),timerSeconds];t.done=true;
+    if(t.meta_id){const m=metas.find(x=>x.id===t.meta_id);if(m){m.tasks_done=(m.tasks_done||0)+1;sb.from('luana_metas').update({tasks_done:m.tasks_done}).eq('id',m.id);}}
+    debouncedSync(()=>sb.from('luana_tasks').update({done:true,historico:t.historico}).eq('id',t.id).then(r=>r.error));
+    renderAll();
+  }
+  document.getElementById('modal-timer').classList.remove('open');activeTimerTask=null;
+}
+function formatSecs(s){if(!s)return null;if(s<60)return s+'s';const m=Math.floor(s/60),r=s%60;return r?m+'min '+r+'s':m+'min';}
+function avgTime(h){if(!h||!h.length)return null;return Math.round(h.reduce((a,b)=>a+b,0)/h.length);}
+
+// ---- RENDER HELPERS ----
+function taskHTML(t){
+  const a=AREAS[t.area]||AREAS.casa;
+  const sc=STATUS_CFG[t.status]||STATUS_CFG.flui;
+  const avg=avgTime(t.historico);
+  const meta=t.meta_id?metas.find(x=>x.id===t.meta_id):null;
+  const timerBadge=t.recorrente?`<span class="timer-badge">⏱ ${avg?'média '+formatSecs(avg):'crono ao concluir'}</span>`:'';
+  const metaBadge=meta?`<span class="area-tag" style="background:${AREAS[meta.area]?.bg};color:${AREAS[meta.area]?.dark}">→ ${meta.nome}</span>`:'';
+  const timeBadge=t.hora?`<span class="time-badge">🕐 ${t.hora}</span>`:'';
+  const notifBadge=t.notificacao?`<span class="notif-badge">🔔</span>`:'';
+  return `<div class="task-item${t.done?' done-item':''}">
+    <div class="task-check${t.done?' done':''}" onclick="toggleTask('${t.id}')"></div>
+    <div style="flex:1;min-width:0">
+      <div class="task-text${t.done?' done':''}">${t.texto}</div>
+      <div class="task-why">${t.porque}</div>
+      <div class="task-meta">
+        <span class="status-pill" style="background:${sc.bg};color:${sc.dark}">${sc.label}</span>
+        <span class="area-tag" style="background:${a.bg};color:${a.dark}">${a.emoji} ${a.label}</span>
+        ${metaBadge}${timeBadge}${timerBadge}${notifBadge}
+      </div>
+      <div class="item-actions">
+        <button class="action-btn" onclick="openEditTask('${t.id}')">✎ editar</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function compItemHTML(c){
+  const a=AREAS[c.area]||AREAS.carreira;
+  return `<div class="comp-item">
+    <div class="comp-dot" style="background:${a.color};margin-top:5px"></div>
+    <div style="flex:1">
+      <div class="comp-name">${c.nome}</div>
+      <div class="comp-sub">${c.hora}${c.local?' · 📍 '+c.local:''}${c.data?' · '+c.data:' · recorrente'}</div>
+      <div class="task-meta" style="margin-top:4px">
+        <span class="area-tag" style="background:${a.bg};color:${a.dark}">${a.emoji} ${a.label}</span>
+        ${c.notificacao?'<span class="notif-badge">🔔</span>':''}
+      </div>
+      <div class="item-actions">
+        <button class="action-btn" onclick="openEditComp('${c.id}')">✎ editar</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ---- RENDER SCREENS ----
+function renderHoje(){
+  const dias=['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
+  const now=new Date();
+  document.getElementById('hdr-dia').textContent=dias[now.getDay()];
+  const name=currentUser?.user_metadata?.name||'Luana';
+  document.getElementById('hdr-greeting').textContent='Oi, '+name.split(' ')[0]+' ✦';
+  const done=tasks.filter(t=>t.done).length;
+  document.getElementById('hdr-sub').textContent=now.getDate()+' de '+MESES_SHORT[now.getMonth()]+' · '+done+' de '+tasks.length+' tarefas feitas';
+  document.getElementById('st-feitas').textContent=done;
+  document.getElementById('st-total').textContent=tasks.length;
+  document.getElementById('st-metas').textContent=metas.length;
+  document.getElementById('perfil-email').textContent=currentUser?.email||'';
+  const sorted=[...compromissos].sort((a,b)=>a.hora.localeCompare(b.hora));
+  const hc=document.getElementById('hoje-comps');
+  hc.innerHTML=sorted.length?sorted.slice(0,3).map(c=>{
+    const a=AREAS[c.area]||AREAS.carreira;
+    return `<div style="display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--border)">
+      <div style="width:36px;height:36px;border-radius:10px;background:${a.bg};display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">${a.emoji}</div>
+      <div><div style="font-size:11px;font-weight:500;color:var(--muted)">${c.hora}</div><div style="font-size:13px;color:var(--text)">${c.nome}</div></div>
+    </div>`;
+  }).join(''):'<div class="empty-state" style="padding:12px 0">Nenhum compromisso hoje</div>';
+  const pending=tasks.filter(t=>!t.done);
+  const ht=document.getElementById('hoje-tasks');
+  ht.innerHTML=pending.length?pending.map(taskHTML).join(''):'<div class="empty-state" style="padding:16px 0">Tudo em dia! ✦</div>';
+}
+
+function renderAgenda(){renderCalendar();}
+
+function renderTarefas(){
+  const pending=tasks.filter(t=>!t.done);
+  const done=tasks.filter(t=>t.done);
+  const groups={trava:pending.filter(t=>t.status==='trava'),flui:pending.filter(t=>t.status==='flui'),pousa:pending.filter(t=>t.status==='pousa')};
+  ['trava','flui','pousa'].forEach(st=>{
+    const sc=STATUS_CFG[st];const el=document.getElementById('tasks-'+st+'-section');
+    el.innerHTML=groups[st].length?`<div class="section-divider" style="color:${sc.dark}">${sc.label} (${groups[st].length})</div><div class="card">${groups[st].map(taskHTML).join('')}</div>`:'';
+  });
+  const doneSec=document.getElementById('tasks-done-section');
+  doneSec.innerHTML=done.length?`<div class="section-divider" style="color:var(--muted)">concluídas (${done.length})</div><div class="card">${done.map(taskHTML).join('')}</div>`:'';
+}
+
+function renderCompromissos(){
+  const types={fixo:[],variavel:[],pessoal:[]};
+  compromissos.forEach(c=>{if(types[c.tipo])types[c.tipo].push(c);else types.variavel.push(c);});
+  const labels={fixo:'Fixos',variavel:'Variáveis',pessoal:'Pessoais'};
+  Object.entries(types).forEach(([tipo,list])=>{
+    const el=document.getElementById('comp-'+tipo+'-section');
+    el.innerHTML=list.length?`<div class="section-divider">${labels[tipo]} (${list.length})</div><div class="card">${list.map(compItemHTML).join('')}</div>`:'';
+  });
+}
+
+function renderMetas(){
+  const el=document.getElementById('metas-list');
+  el.innerHTML=metas.map(m=>{
+    const a=AREAS[m.area]||AREAS.carreira;
+    const rel=tasks.filter(t=>t.meta_id===m.id);
+    const dc=rel.filter(t=>t.done).length;
+    const msg=dc>0?`Você já concluiu <strong>${dc} tarefa${dc>1?'s':''}</strong> que vai${dc>1?'o':''} te levar à meta de <strong>${m.nome}</strong>. Continue! ✦`:'Vincule tarefas a essa meta para acompanhar seu progresso.';
+    return `<div class="meta-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+        <div>
+          <span class="area-tag" style="background:${a.bg};color:${a.dark}">${a.emoji} ${a.label}</span>
+          <div class="meta-name" style="margin-top:6px">${m.emoji||'🎯'} ${m.nome}</div>
+        </div>
+        <div style="text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+          <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:500;color:${a.color}" class="meta-pct-num">${m.pct}%</div>
+          <div style="font-size:10px;color:var(--muted)">${rel.length} tarefas</div>
+          <button onclick="openEditMeta('${m.id}')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;padding:2px 6px;border:1px solid var(--border);border-radius:6px">✎ editar</button>
+        </div>
+      </div>
+      <div class="meta-msg">${msg}</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${m.pct}%;background:${a.color}"></div></div>
+      <input type="range" min="0" max="100" value="${m.pct}" step="1" style="width:100%;margin-top:8px" oninput="updateMetaPct('${m.id}',this.value)">
+    </div>`;
+  }).join('');
+}
+
+function renderAreas(){
+  const el=document.getElementById('areas-grid');
+  el.innerHTML=Object.entries(AREAS).map(([key,a])=>{
+    const tc=tasks.filter(t=>t.area===key).length;
+    const mc=metas.filter(m=>m.area===key).length;
+    return `<div class="area-card" style="border-top:3px solid ${a.color}">
+      <div style="font-size:24px;margin-bottom:8px">${a.emoji}</div>
+      <div style="font-size:14px;font-weight:500;color:var(--text)">${a.label}</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:2px">${tc} tarefa${tc!==1?'s':''} · ${mc} meta${mc!==1?'s':''}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderAll(){
+  renderHoje();renderAgenda();renderTarefas();renderCompromissos();renderMetas();renderAreas();
+}
+
+// ---- SWIPE CALENDAR ----
+let touchStartX=0;
+document.addEventListener('touchstart',e=>{touchStartX=e.touches[0].clientX;},{passive:true});
+document.addEventListener('touchend',e=>{
+  if(currentScreen!=='agenda')return;
+  const dx=e.changedTouches[0].clientX-touchStartX;
+  if(Math.abs(dx)>60){calWeekOffset(dx<0?1:-1);}
+},{passive:true});
+
+// ---- INIT ----
+async function init(){
+  const{data:{session}}=await sb.auth.getSession();
+  document.getElementById('loading').style.display='none';
+  if(session?.user){
+    currentUser=session.user;
+    document.getElementById('app-wrap').style.display='block';
+    await requestNotifPermission();
+    await loadAll();
+  } else {
+    document.getElementById('auth-wrap').style.display='flex';
+  }
+ 
