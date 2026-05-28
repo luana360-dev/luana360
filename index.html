@@ -27,7 +27,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:430px;margin:0 auto;overflow-x:hidden}
- 
+
 /* AUTH */
 .auth-wrap{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:32px 24px}
 .auth-logo{font-family:'Fraunces',serif;font-size:36px;font-weight:500;margin-bottom:6px}
@@ -43,12 +43,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .auth-btn:disabled{opacity:.5}
 .auth-msg{font-size:12px;color:var(--trava-dark);background:var(--trava-bg);padding:10px 14px;border-radius:10px;margin-top:12px;display:none}
 .auth-success{color:var(--saude-dark)!important;background:var(--saude-bg)!important}
- 
+
 /* APP SHELL */
 .app-wrap{display:none}
 .screen{display:none;padding:0 0 calc(var(--nav-h)+16px);min-height:100vh}
 .screen.active{display:block}
- 
+
 /* NAV */
 .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:var(--nav-h);background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;z-index:100;padding-bottom:env(safe-area-inset-bottom,8px)}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 8px;cursor:pointer;border:none;background:none;color:var(--muted);transition:color .2s}
@@ -57,23 +57,23 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .nav-item span{font-size:10px;font-weight:500;letter-spacing:.03em}
 .nav-dot{width:4px;height:4px;border-radius:50%;background:var(--text);margin-top:-1px;display:none}
 .nav-item.active .nav-dot{display:block}
- 
+
 /* HEADER */
 .header{padding:52px 20px 16px;background:var(--surface);border-bottom:1px solid var(--border);margin-bottom:16px}
 .header-label{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
 .header-title{font-family:'Fraunces',serif;font-size:28px;font-weight:500;line-height:1.1}
 .header-sub{font-size:13px;color:var(--muted);margin-top:4px}
- 
+
 /* CARDS */
 .card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);padding:16px;margin:0 16px 12px}
 .card-title{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px}
- 
+
 /* STATS */
 .stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:0 16px 12px}
 .stat-box{background:var(--surface);border-radius:var(--radius-sm);border:1px solid var(--border);padding:12px 10px;text-align:center}
 .stat-num{font-family:'Fraunces',serif;font-size:26px;font-weight:500;line-height:1}
 .stat-lbl{font-size:10px;color:var(--muted);margin-top:3px;font-weight:500}
- 
+
 /* WEEKLY CALENDAR */
 .cal-wrap{background:var(--surface);border-bottom:1px solid var(--border);overflow:hidden}
 .cal-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 8px}
@@ -90,7 +90,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .cal-dot-row{display:flex;gap:2px;justify-content:center;min-height:6px}
 .cal-dot{width:4px;height:4px;border-radius:50%}
 .cal-selected-label{font-size:12px;color:var(--muted);padding:0 16px 10px;font-family:'Fraunces',serif;font-style:italic}
- 
+
 /* DAY EVENTS */
 .day-event{display:flex;gap:10px;align-items:flex-start;padding:8px 16px;border-bottom:1px solid var(--border);background:var(--surface)}
 .day-event:first-child{border-top:1px solid var(--border)}
@@ -99,7 +99,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .day-event-name{font-size:13px;color:var(--text);line-height:1.4}
 .day-event-sub{font-size:11px;color:var(--muted);margin-top:1px}
 .day-event-type{font-size:10px;padding:1px 7px;border-radius:8px;background:var(--faint);color:var(--muted);display:inline-block;margin-top:3px}
- 
+
 /* TASKS */
 .task-item{display:flex;gap:10px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--border);transition:opacity .2s}
 .task-item:last-child{border-bottom:none;padding-bottom:0}
@@ -118,14 +118,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .item-actions{display:flex;gap:6px;margin-top:6px}
 .action-btn{font-size:11px;padding:3px 9px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif}
 .action-btn.del{color:var(--trava-dark);border-color:var(--trava-bg)}
- 
+
 /* COMPROMISSOS */
 .comp-item{display:flex;gap:10px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--border)}
 .comp-item:last-child{border-bottom:none;padding-bottom:0}
 .comp-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:3px}
 .comp-name{font-size:14px;color:var(--text);font-weight:500}
 .comp-sub{font-size:11px;color:var(--muted);margin-top:2px}
- 
+
 /* METAS */
 .meta-card{border-radius:var(--radius);padding:16px;margin:0 16px 10px;border:1px solid var(--border);background:var(--surface)}
 .meta-name{font-family:'Fraunces',serif;font-size:16px;font-weight:500;line-height:1.2}
@@ -133,12 +133,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .meta-msg strong{color:var(--text);font-weight:500}
 .bar-bg{height:6px;background:var(--faint);border-radius:3px;overflow:hidden}
 .bar-fill{height:100%;border-radius:3px;transition:width .5s ease}
- 
+
 /* AREAS */
 .areas-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px}
 .area-card{border-radius:var(--radius);padding:16px;border:1px solid var(--border);background:var(--surface);transition:transform .15s}
 .area-card:active{transform:scale(.97)}
- 
+
 /* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
 .modal-overlay.open{opacity:1;pointer-events:all}
@@ -159,14 +159,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .comp-type-row{display:flex;gap:8px}
 .comp-type-btn{flex:1;padding:8px;border-radius:10px;border:1.5px solid var(--border);font-size:12px;font-weight:500;cursor:pointer;background:var(--surface);color:var(--muted);font-family:'DM Sans',sans-serif}
 .comp-type-btn.active{border-color:var(--text);background:var(--faint);color:var(--text)}
- 
+
 /* TIMER */
 .timer-display{font-family:'Fraunces',serif;font-size:54px;font-weight:300;text-align:center;padding:24px 0 16px}
 .timer-task-name{text-align:center;font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.4}
 .timer-btns{display:flex;gap:10px}
 .timer-btns button{flex:1;padding:12px;border-radius:12px;font-size:14px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--faint);color:var(--text)}
 .timer-btns .btn-primary{background:var(--text);color:white;border-color:var(--text)}
- 
+
 /* MISC */
 .section-divider{padding:8px 16px 4px;font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.07em;text-transform:uppercase}
 .empty-state{text-align:center;padding:24px 16px;color:var(--muted);font-size:13px}
@@ -190,12 +190,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 </style>
 </head>
 <body>
- 
+
 <div class="loading-screen" id="loading">
   <div class="loading-logo">Luana 360</div>
   <div class="loading-dot"></div>
 </div>
- 
+
 <!-- AUTH -->
 <div class="auth-wrap" id="auth-wrap" style="display:none">
   <div class="auth-logo">Luana 360 ✦</div>
@@ -210,10 +210,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <button class="auth-btn" id="auth-btn" onclick="doAuth()">Entrar</button>
   <div class="auth-msg" id="auth-msg"></div>
 </div>
- 
+
 <!-- APP -->
 <div class="app-wrap" id="app-wrap">
- 
+
   <!-- HOJE -->
   <div id="s-hoje" class="screen active">
     <div class="header">
@@ -242,7 +242,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div style="font-family:'Fraunces',serif;font-size:13px;color:var(--muted);font-style:italic;line-height:1.6">"Todo compromisso resolve algo. E resolver atrai calma."</div>
     </div>
   </div>
- 
+
   <!-- AGENDA -->
   <div id="s-agenda" class="screen">
     <div class="header" style="padding-bottom:0">
@@ -264,7 +264,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <button class="add-inline-btn" style="flex:1" onclick="openAddComp()">+ compromisso</button>
     </div>
   </div>
- 
+
   <!-- TAREFAS -->
   <div id="s-tarefas" class="screen">
     <div class="header">
@@ -277,7 +277,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div id="tasks-done-section"></div>
     <div style="margin:0 16px 16px"><button class="add-inline-btn" onclick="openAddTask()">+ nova tarefa</button></div>
   </div>
- 
+
   <!-- COMPROMISSOS -->
   <div id="s-compromissos" class="screen">
     <div class="header">
@@ -289,7 +289,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div id="comp-pessoal-section"></div>
     <div style="margin:0 16px 16px"><button class="add-inline-btn" onclick="openAddComp()">+ novo compromisso</button></div>
   </div>
- 
+
   <!-- METAS -->
   <div id="s-metas" class="screen">
     <div class="header">
@@ -301,7 +301,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <button class="add-inline-btn" onclick="openAddMeta()">+ nova meta</button>
     </div>
   </div>
- 
+
   <!-- AREAS -->
   <div id="s-areas" class="screen">
     <div class="header">
@@ -317,7 +317,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <button onclick="doLogout()" style="width:100%;padding:10px;background:none;color:var(--trava-dark);border:1px solid var(--trava-bg);border-radius:10px;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer">Sair da conta</button>
     </div>
   </div>
- 
+
   <nav class="nav">
     <button class="nav-item active" id="nav-hoje" onclick="goTo('hoje')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
@@ -344,21 +344,21 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <span>áreas</span><div class="nav-dot"></div>
     </button>
   </nav>
- 
+
   <button class="fab" id="fab" onclick="onFab()" aria-label="adicionar">+</button>
 </div>
- 
+
 <!-- MODAL TAREFA -->
 <div class="modal-overlay" id="modal-task" onclick="closeModal('modal-task')">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-title" id="modal-task-title">Nova tarefa</div>
     <input type="hidden" id="nt-edit-id">
- 
+
     <div id="rec-templates-section" class="recurrent-section" style="display:none">
       <div class="recurrent-section-title">tarefas recorrentes salvas</div>
       <div id="rec-templates-list"></div>
     </div>
- 
+
     <div class="field"><label>O quê?</label><input id="nt-texto" placeholder="descreva a tarefa..."></div>
     <div class="field"><label>Por quê resolve?</label><input id="nt-porque" placeholder="qual problema isso elimina?"></div>
     <div class="field"><label>Meta vinculada</label><select id="nt-meta"></select></div>
@@ -394,7 +394,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <button class="btn-danger" id="nt-delete-btn" style="display:none" onclick="deleteTask()">Excluir tarefa</button>
   </div>
 </div>
- 
+
 <!-- MODAL COMPROMISSO -->
 <div class="modal-overlay" id="modal-comp" onclick="closeModal('modal-comp')">
   <div class="modal" onclick="event.stopPropagation()">
@@ -428,7 +428,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <button class="btn-danger" id="nc-delete-btn" style="display:none" onclick="deleteComp()">Excluir compromisso</button>
   </div>
 </div>
- 
+
 <!-- MODAL META -->
 <div class="modal-overlay" id="modal-meta" onclick="closeModal('modal-meta')">
   <div class="modal" onclick="event.stopPropagation()">
@@ -448,7 +448,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <button class="btn-danger" id="nm-delete-btn" style="display:none" onclick="deleteMeta()">Excluir meta</button>
   </div>
 </div>
- 
+
 <!-- MODAL TIMER -->
 <div class="modal-overlay" id="modal-timer">
   <div class="modal">
@@ -462,12 +462,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 </div>
- 
+
 <script>
 const SUPABASE_URL='https://vdefcjizmwkpsmqsfgka.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkZWZjaml6bXdrcHNtcXNmZ2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5MjI0MTcsImV4cCI6MjA5NTQ5ODQxN30.KsVhrhpy6JtC4t4JDTgSiGcKRki67kZ-ebItcOVjnyA';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
- 
+
 const AREAS={
   saude:{label:'Saúde',emoji:'🌿',color:'var(--saude)',bg:'var(--saude-bg)',dark:'var(--saude-dark)'},
   carreira:{label:'Carreira',emoji:'📚',color:'var(--carreira)',bg:'var(--carreira-bg)',dark:'var(--carreira-dark)'},
@@ -486,14 +486,14 @@ const DIAS_PT=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado']
 const DIAS_SHORT=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
 const MESES_PT=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 const MESES_SHORT=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
- 
+
 let currentUser=null,metas=[],tasks=[],compromissos=[];
 let currentScreen='hoje',compType='fixo';
 let timerInterval=null,timerSeconds=0,timerRunning=false,activeTimerTask=null;
 let authMode='login',syncTimeout=null;
 let calWeekDelta=0,calSelectedDate=new Date();
 let notifPermission=false;
- 
+
 // ---- NOTIFICATIONS ----
 async function requestNotifPermission(){
   if(!('Notification' in window))return;
@@ -503,7 +503,7 @@ async function requestNotifPermission(){
     notifPermission=p==='granted';
   }
 }
- 
+
 function scheduleNotif(title,body,dateStr,timeStr){
   if(!notifPermission||!dateStr||!timeStr)return;
   const dt=new Date(dateStr+'T'+timeStr);
@@ -514,7 +514,7 @@ function scheduleNotif(title,body,dateStr,timeStr){
     try{new Notification(title,{body,icon:'',badge:''});}catch(e){}
   },ms);
 }
- 
+
 // ---- AUTH ----
 function switchTab(mode){
   authMode=mode;
@@ -548,7 +548,7 @@ async function doLogout(){
   document.getElementById('auth-wrap').style.display='flex';
   switchTab('login');
 }
- 
+
 // ---- SYNC ----
 function setSyncBadge(state){
   const b=document.getElementById('sync-badge');
@@ -560,7 +560,7 @@ function debouncedSync(fn){
   setSyncBadge('syncing');clearTimeout(syncTimeout);
   syncTimeout=setTimeout(async()=>{const e=await fn();setSyncBadge(e?'error':'saved');},700);
 }
- 
+
 // ---- LOAD ----
 async function loadAll(){
   if(!currentUser)return;
@@ -571,31 +571,9 @@ async function loadAll(){
     sb.from('luana_compromissos').select('*').eq('user_id',uid).order('hora'),
   ]);
   metas=tm.data||[];tasks=tt.data||[];compromissos=tc.data||[];
-  if(metas.length===0)await seedDefaults();
   renderAll();
 }
-async function seedDefaults(){
-  const uid=currentUser.id;
-  const dm=[
-    {user_id:uid,nome:'Formar',area:'carreira',emoji:'🎓',pct:60,tasks_done:0},
-    {user_id:uid,nome:'Cuidar da saúde',area:'saude',emoji:'💪',pct:30,tasks_done:0},
-    {user_id:uid,nome:'Emagrecer',area:'saude',emoji:'🌱',pct:20,tasks_done:0},
-    {user_id:uid,nome:'Juntar dinheiro',area:'financas',emoji:'💰',pct:15,tasks_done:0},
-  ];
-  const{data:ms}=await sb.from('luana_metas').insert(dm).select();metas=ms||[];
-  const dt=[
-    {user_id:uid,texto:'Fazer faxina em casa',porque:'casa organizada traz paz mental',status:'flui',area:'casa',meta_id:null,done:false,recorrente:true,historico:[],hora:null,data:null,notificacao:false},
-    {user_id:uid,texto:'Estudar para o trabalho de sexta',porque:'cumprir o prazo e chegar preparada',status:'trava',area:'carreira',meta_id:metas[0]?.id||null,done:false,recorrente:false,historico:[],hora:null,data:null,notificacao:false},
-  ];
-  const{data:ts}=await sb.from('luana_tasks').insert(dt).select();tasks=ts||[];
-  const dc=[
-    {user_id:uid,nome:'Trabalho',hora:'12:00',tipo:'fixo',area:'carreira',local:'',data:null,notificacao:false},
-    {user_id:uid,nome:'Saída do trabalho',hora:'18:00',tipo:'fixo',area:'carreira',local:'',data:null,notificacao:false},
-    {user_id:uid,nome:'Academia',hora:'09:30',tipo:'variavel',area:'saude',local:'',data:null,notificacao:false},
-  ];
-  const{data:cs}=await sb.from('luana_compromissos').insert(dc).select();compromissos=cs||[];
-}
- 
+
 function exportData(){
   const d=JSON.stringify({metas,tasks,compromissos,exportedAt:new Date().toISOString()},null,2);
   const b=new Blob([d],{type:'application/json'});
@@ -603,13 +581,13 @@ function exportData(){
   const a=document.createElement('a');a.href=u;a.download='luana360_backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(u);
   showToast('Backup exportado!');
 }
- 
+
 function showToast(msg){
   let t=document.getElementById('toast');
   if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;bottom:calc(var(--nav-h)+24px);left:50%;transform:translateX(-50%);background:#1A1814;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;z-index:9999;white-space:nowrap;transition:opacity .3s;pointer-events:none;max-width:90vw;text-align:center';document.body.appendChild(t);}
   t.textContent=msg;t.style.opacity='1';clearTimeout(t._timer);t._timer=setTimeout(()=>{t.style.opacity='0';},2800);
 }
- 
+
 // ---- NAV ----
 function goTo(screen){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -624,7 +602,7 @@ function onFab(){
   const fn=map[currentScreen]||'openAddTask';
   window[fn]();
 }
- 
+
 // ---- CALENDAR ----
 function calWeekOffset(d){calWeekDelta+=d;renderCalendar();}
 function getWeekDates(delta){
@@ -635,14 +613,14 @@ function getWeekDates(delta){
 }
 function isSameDay(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate();}
 function dateStr(d){return d.toISOString().slice(0,10);}
- 
+
 function renderCalendar(){
   const days=getWeekDates(calWeekDelta);
   const today=new Date();today.setHours(0,0,0,0);
   const months=[...new Set(days.map(d=>d.getMonth()))];
   const label=months.map(m=>MESES_PT[m]).join(' / ')+' '+days[0].getFullYear();
   document.getElementById('cal-month-label').textContent=label;
- 
+
   const row=document.getElementById('cal-days-row');
   row.innerHTML=days.map(d=>{
     const ds=dateStr(d);
@@ -658,17 +636,17 @@ function renderCalendar(){
       <div class="cal-dot-row">${dots}</div>
     </div>`;
   }).join('');
- 
+
   const selLabel=DIAS_PT[calSelectedDate.getDay()]+', '+calSelectedDate.getDate()+' de '+MESES_PT[calSelectedDate.getMonth()];
   document.getElementById('cal-selected-label').textContent=selLabel;
   renderDayEvents();
 }
- 
+
 function calSelectDay(ts){
   calSelectedDate=new Date(ts);
   renderCalendar();
 }
- 
+
 function renderDayEvents(){
   const ds=dateStr(calSelectedDate);
   const dayComps=compromissos.filter(c=>!c.data||c.data===ds).sort((a,b)=>a.hora.localeCompare(b.hora));
@@ -677,7 +655,7 @@ function renderDayEvents(){
     ...dayComps.map(c=>({...c,_type:'comp'})),
     ...dayTasks.map(t=>({...t,_type:'task'})),
   ].sort((a,b)=>(a.hora||'99:99').localeCompare(b.hora||'99:99'));
- 
+
   const el=document.getElementById('agenda-day-events');
   if(!all.length){el.innerHTML='<div class="empty-state">Nenhum evento neste dia</div>';return;}
   el.innerHTML=all.map(ev=>{
@@ -707,7 +685,7 @@ function renderDayEvents(){
     }
   }).join('');
 }
- 
+
 // ---- MODALS ----
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 function selectPill(groupId,el){
@@ -716,7 +694,7 @@ function selectPill(groupId,el){
 }
 function getActivePill(groupId){const el=document.querySelector('#'+groupId+' .ps-pill.active');return el?el.dataset.v:null;}
 function setCompType(t){compType=t;['fixo','variavel','pessoal'].forEach(x=>document.getElementById('ct-'+x).classList.toggle('active',x===t));}
- 
+
 // ---- TASK MODAL ----
 function openAddTask(){
   document.getElementById('modal-task-title').textContent='Nova tarefa';
@@ -730,11 +708,11 @@ function openAddTask(){
   selectPill('nt-status-pills',document.querySelector('#nt-status-pills [data-v="flui"]'));
   selectPill('nt-rec-pills',document.querySelector('#nt-rec-pills [data-v="nao"]'));
   selectPill('nt-notif-pills',document.querySelector('#nt-notif-pills [data-v="nao"]'));
- 
+
   const sel=document.getElementById('nt-meta');
   sel.innerHTML='<option value="">— sem meta —</option>';
   metas.forEach(m=>{sel.innerHTML+=`<option value="${m.id}">${AREAS[m.area]?.emoji||''} ${m.nome}</option>`;});
- 
+
   const recTasks=tasks.filter(t=>t.recorrente);
   const recSec=document.getElementById('rec-templates-section');
   if(recTasks.length){
@@ -749,7 +727,7 @@ function openAddTask(){
   } else { recSec.style.display='none'; }
   document.getElementById('modal-task').classList.add('open');
 }
- 
+
 function fillFromTemplate(id){
   const t=tasks.find(x=>x.id===id);if(!t)return;
   document.getElementById('nt-texto').value=t.texto;
@@ -759,7 +737,7 @@ function fillFromTemplate(id){
   selectPill('nt-status-pills',document.querySelector(`#nt-status-pills [data-v="${t.status}"]`)||document.querySelector('#nt-status-pills [data-v="flui"]'));
   selectPill('nt-rec-pills',document.querySelector('#nt-rec-pills [data-v="sim"]'));
 }
- 
+
 function openEditTask(id){
   const t=tasks.find(x=>x.id===id);if(!t)return;
   document.getElementById('modal-task-title').textContent='Editar tarefa';
@@ -772,18 +750,18 @@ function openEditTask(id){
   document.getElementById('nt-save-btn').textContent='Salvar alterações';
   document.getElementById('nt-delete-btn').style.display='block';
   document.getElementById('rec-templates-section').style.display='none';
- 
+
   const sel=document.getElementById('nt-meta');
   sel.innerHTML='<option value="">— sem meta —</option>';
   metas.forEach(m=>{sel.innerHTML+=`<option value="${m.id}"${m.id===t.meta_id?' selected':''}>${AREAS[m.area]?.emoji||''} ${m.nome}</option>`;});
- 
+
   const spEl=document.querySelector(`#nt-status-pills [data-v="${t.status}"]`)||document.querySelector('#nt-status-pills [data-v="flui"]');
   selectPill('nt-status-pills',spEl);
   selectPill('nt-rec-pills',document.querySelector(`#nt-rec-pills [data-v="${t.recorrente?'sim':'nao'}"]`));
   selectPill('nt-notif-pills',document.querySelector(`#nt-notif-pills [data-v="${t.notificacao?'sim':'nao'}"]`));
   document.getElementById('modal-task').classList.add('open');
 }
- 
+
 async function saveTask(){
   const texto=document.getElementById('nt-texto').value.trim();if(!texto)return;
   const editId=document.getElementById('nt-edit-id').value;
@@ -818,7 +796,7 @@ async function saveTask(){
     closeModal('modal-task');setSyncBadge('saved');renderAll();
   }
 }
- 
+
 async function deleteTask(){
   const id=document.getElementById('nt-edit-id').value;if(!id)return;
   if(!confirm('Excluir esta tarefa?'))return;
@@ -828,7 +806,7 @@ async function deleteTask(){
     closeModal('modal-task');showToast('Tarefa excluída!');renderAll();
   } else {showToast('Erro ao excluir.');}
 }
- 
+
 async function toggleTask(id,force){
   const t=tasks.find(x=>x.id===id);if(!t)return;
   if(!t.done&&t.recorrente&&force!==true){startTimer(t);return;}
@@ -837,7 +815,7 @@ async function toggleTask(id,force){
   debouncedSync(()=>sb.from('luana_tasks').update({done:t.done}).eq('id',t.id).then(r=>r.error));
   renderAll();
 }
- 
+
 // ---- COMP MODAL ----
 function openAddComp(){
   document.getElementById('modal-comp-title').textContent='Novo compromisso';
@@ -852,7 +830,7 @@ function openAddComp(){
   selectPill('nc-notif-pills',document.querySelector('#nc-notif-pills [data-v="nao"]'));
   document.getElementById('modal-comp').classList.add('open');
 }
- 
+
 function openEditComp(id){
   const c=compromissos.find(x=>x.id===id);if(!c)return;
   document.getElementById('modal-comp-title').textContent='Editar compromisso';
@@ -868,7 +846,7 @@ function openEditComp(id){
   selectPill('nc-notif-pills',document.querySelector(`#nc-notif-pills [data-v="${c.notificacao?'sim':'nao'}"]`));
   document.getElementById('modal-comp').classList.add('open');
 }
- 
+
 async function saveComp(){
   const nome=document.getElementById('nc-nome').value.trim();if(!nome)return;
   const editId=document.getElementById('nc-edit-id').value;
@@ -895,7 +873,7 @@ async function saveComp(){
     closeModal('modal-comp');setSyncBadge('saved');renderAll();
   }
 }
- 
+
 async function deleteComp(){
   const id=document.getElementById('nc-edit-id').value;if(!id)return;
   if(!confirm('Excluir este compromisso?'))return;
@@ -905,7 +883,7 @@ async function deleteComp(){
     closeModal('modal-comp');showToast('Compromisso excluído!');renderAll();
   } else {showToast('Erro ao excluir.');}
 }
- 
+
 // ---- META MODAL ----
 function openAddMeta(){
   document.getElementById('modal-meta-title').textContent='Nova meta';
@@ -918,7 +896,7 @@ function openAddMeta(){
   document.getElementById('nm-delete-btn').style.display='none';
   document.getElementById('modal-meta').classList.add('open');
 }
- 
+
 function openEditMeta(id){
   const m=metas.find(x=>x.id===id);if(!m)return;
   document.getElementById('modal-meta-title').textContent='Editar meta';
@@ -931,7 +909,7 @@ function openEditMeta(id){
   document.getElementById('nm-delete-btn').style.display='block';
   document.getElementById('modal-meta').classList.add('open');
 }
- 
+
 async function saveMeta(){
   const nome=document.getElementById('nm-nome').value.trim();if(!nome)return;
   const editId=document.getElementById('nm-edit-id').value;
@@ -951,7 +929,7 @@ async function saveMeta(){
   btn.disabled=false;
   if(metaOk){showToast(editId?'Alterações salvas!':'Meta adicionada!');closeModal('modal-meta');setSyncBadge('saved');renderAll();}
 }
- 
+
 async function deleteMeta(){
   const id=document.getElementById('nm-edit-id').value;if(!id)return;
   if(!confirm('Excluir esta meta?'))return;
@@ -962,7 +940,7 @@ async function deleteMeta(){
     closeModal('modal-meta');showToast('Meta excluída!');renderAll();
   } else {showToast('Erro ao excluir.');}
 }
- 
+
 async function updateMetaPct(id,val){
   const m=metas.find(x=>x.id===id);if(!m)return;
   m.pct=parseInt(val);
@@ -975,7 +953,7 @@ async function updateMetaPct(id,val){
     }
   });
 }
- 
+
 // ---- TIMER ----
 function startTimer(task){
   activeTimerTask=task;timerSeconds=0;timerRunning=false;
@@ -1003,7 +981,7 @@ async function finishTimer(){
 }
 function formatSecs(s){if(!s)return null;if(s<60)return s+'s';const m=Math.floor(s/60),r=s%60;return r?m+'min '+r+'s':m+'min';}
 function avgTime(h){if(!h||!h.length)return null;return Math.round(h.reduce((a,b)=>a+b,0)/h.length);}
- 
+
 // ---- RENDER HELPERS ----
 function taskHTML(t){
   const a=AREAS[t.area]||AREAS.casa;
@@ -1031,7 +1009,7 @@ function taskHTML(t){
     </div>
   </div>`;
 }
- 
+
 function compItemHTML(c){
   const a=AREAS[c.area]||AREAS.carreira;
   return `<div class="comp-item">
@@ -1049,7 +1027,7 @@ function compItemHTML(c){
     </div>
   </div>`;
 }
- 
+
 // ---- RENDER SCREENS ----
 function renderHoje(){
   const dias=['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
@@ -1076,9 +1054,9 @@ function renderHoje(){
   const ht=document.getElementById('hoje-tasks');
   ht.innerHTML=pending.length?pending.map(taskHTML).join(''):'<div class="empty-state" style="padding:16px 0">Tudo em dia! ✦</div>';
 }
- 
+
 function renderAgenda(){renderCalendar();}
- 
+
 function renderTarefas(){
   const pending=tasks.filter(t=>!t.done);
   const done=tasks.filter(t=>t.done);
@@ -1090,7 +1068,7 @@ function renderTarefas(){
   const doneSec=document.getElementById('tasks-done-section');
   doneSec.innerHTML=done.length?`<div class="section-divider" style="color:var(--muted)">concluídas (${done.length})</div><div class="card">${done.map(taskHTML).join('')}</div>`:'';
 }
- 
+
 function renderCompromissos(){
   const types={fixo:[],variavel:[],pessoal:[]};
   compromissos.forEach(c=>{if(types[c.tipo])types[c.tipo].push(c);else types.variavel.push(c);});
@@ -1100,7 +1078,7 @@ function renderCompromissos(){
     el.innerHTML=list.length?`<div class="section-divider">${labels[tipo]} (${list.length})</div><div class="card">${list.map(compItemHTML).join('')}</div>`:'';
   });
 }
- 
+
 function renderMetas(){
   const el=document.getElementById('metas-list');
   el.innerHTML=metas.map(m=>{
@@ -1126,7 +1104,7 @@ function renderMetas(){
     </div>`;
   }).join('');
 }
- 
+
 function renderAreas(){
   const el=document.getElementById('areas-grid');
   el.innerHTML=Object.entries(AREAS).map(([key,a])=>{
@@ -1139,11 +1117,11 @@ function renderAreas(){
     </div>`;
   }).join('');
 }
- 
+
 function renderAll(){
   renderHoje();renderAgenda();renderTarefas();renderCompromissos();renderMetas();renderAreas();
 }
- 
+
 // ---- SWIPE CALENDAR ----
 let touchStartX=0;
 document.addEventListener('touchstart',e=>{touchStartX=e.touches[0].clientX;},{passive:true});
@@ -1152,7 +1130,7 @@ document.addEventListener('touchend',e=>{
   const dx=e.changedTouches[0].clientX-touchStartX;
   if(Math.abs(dx)>60){calWeekOffset(dx<0?1:-1);}
 },{passive:true});
- 
+
 // ---- INIT ----
 function showAuth(){
   document.getElementById('loading').style.display='none';
@@ -1189,10 +1167,10 @@ async function init(){
     if(event==='SIGNED_OUT'){showAuth();}
   });
 }
- 
+
 document.getElementById('auth-email').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('auth-password').focus();});
 document.getElementById('auth-password').addEventListener('keydown',e=>{if(e.key==='Enter')doAuth();});
- 
+
 init();
 </script>
 </body>
