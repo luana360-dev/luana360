@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -1005,7 +1004,7 @@ function taskHTML(t){
       </div>
       <div class="item-actions">
         <button class="action-btn" onclick="openEditTask('${t.id}')">✎ editar</button>
-        ${!t.done?`<button class="action-btn" style="color:var(--saude-dark);border-color:var(--saude-bg)" onclick="toggleTask('${t.id}',true)">✓ concluir</button>`:'<button class="action-btn" onclick="toggleTask(''+t.id+'',true)">↩ desfazer</button>'}
+        <button class="action-btn" style="color:var(--saude-dark);border-color:var(--saude-bg)" onclick="toggleTask('${t.id}',true)">${t.done?'↩ desfazer':'✓ concluir'}</button>
       </div>
     </div>
   </div>`;
